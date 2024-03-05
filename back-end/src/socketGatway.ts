@@ -17,6 +17,7 @@ export class socketGateway {
 
     handleConnection(client: Socket) {
         console.log("user connected", client.id)
+        // this.server.emit("test", "world")
 
     }
     handleDisconnect(client: Socket) {
@@ -29,10 +30,10 @@ export class socketGateway {
     }
 
     @SubscribeMessage('onJoinGame')
-    onJoinGame(client: Socket, data: string) {
+    onJoinGame(client: Socket) {
         joinRoom(this.server, client)
-        this.server.emit("test", "world")
     }
+
 
     //     @SubscribeMessage('leaveGame')
     //     onLeaveGame(@MessageBody() data: any) {
@@ -41,31 +42,43 @@ export class socketGateway {
     //     }
 }
 
-function QueueWaiting(socket: Socket) {
+function QueueWaiting(io: Server, socket: Socket) {
     if (roomSetting.queue.includes(socket.id))
+        // this.server.emit("test", "you are already existing in waiting room")
         console.log("this player already exists in waiting room")
+    else if (checkSocket(socket))
+        console.log("player already exists in other room")
     else {
         if (roomSetting.queue.length < 3) {
             roomSetting.queue.push(socket.id)
             console.log("id ", socket.id, "is waiting")
+            if (roomSetting.queue.length == 1)
+                io.to(roomSetting.queue).emit("playerIsWaiting", true)
         }
     }
 }
 function joinRoom(io: Server, socket: Socket) {
     const roomName = "room" + roomSetting.num
     const roomInfo = io.sockets.adapter.rooms
-    QueueWaiting(socket)
+    QueueWaiting(io, socket)
     if (roomSetting.queue.length == 2) {
         const Id: Set<string> = new Set(roomSetting.queue)
         roomInfo.set(roomName, Id)
         roomSetting.Rooms.set(roomName, roomSetting.queue)
+        io.to(roomName).emit("StartGame", true)
         roomSetting.queue = []
         console.log("players ready to play in ", roomName)
-        io.to(roomName).emit("test", "hello")
         roomSetting.num += 1
     }
 };
 
+function checkSocket(socket: Socket) {
+    for (let tmp of roomSetting.Rooms.values()) {
+        if (tmp.includes(socket.id))
+            return (true)
+    }
+    return (false)
+}
 
 function leaveQueue(io: Server, socket: Socket) {
     roomSetting.queue.filter(value => value !== socket.id)

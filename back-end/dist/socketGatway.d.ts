@@ -5,5 +5,5 @@ export declare class socketGateway {
     handleConnection(client: Socket): void;
     handleDisconnect(client: Socket): void;
     ontest(client: Socket, MessageBody: string): void;
-    onJoinGame(client: Socket, data: string): void;
+    onJoinGame(client: Socket): void;
 }

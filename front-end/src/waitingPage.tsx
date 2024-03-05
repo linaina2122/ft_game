@@ -1,19 +1,25 @@
 
-import { useEffect } from "react";
-import { initSocket } from "./send_data";
-import './style/WaitingPage.css'
-// import { buttonStyle } from './objects';
+// // import { useEffect, useState } from "react";
+// import { socket } from "./App";
+// import './style/WaitingPage.css'
+// import { InitSetup } from "./rander_scene";
+// // import { useState } from "react";
+// import App from "./App";
 
 
-export function RequestForStart() {
-    i : initSocket
-    // useEffect(() => {
-        i.sendtest
-    // }), [];
+// function SendData() {
+//     socket.emit("onJoinGame");
+// }
 
-    return (
-        < div id="StartButton" className="StartButton" >
-            < button className="btn" onClick={SendData} > START GAME</button >
-        </div >
-    )
-}
+// export function WaitingPage() {
+//     return (
+//         < div id="StartButton" className="StartButton" >
+//             < button className="btn" onClick={SendData} > START GAME</button >
+//             {(
+//                 <div className="Try">waitingPage...</div>
+//             ) : (
+//             <InitSetup />
+//             )}
+//         </div >
+//     )
+// }

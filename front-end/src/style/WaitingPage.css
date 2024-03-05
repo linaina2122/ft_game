@@ -16,3 +16,11 @@
 .btn:hover{
     transform: scale(3);
 }
+
+.Try{
+    font-size: large;
+    height: 200vh;
+    width: 100%;
+    text-align: center;
+    text-transform: capitalize;
+}

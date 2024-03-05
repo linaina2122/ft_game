@@ -26,9 +26,8 @@ let socketGateway = class socketGateway {
     ontest(client, MessageBody) {
         console.log("getting the event name ", MessageBody);
     }
-    onJoinGame(client, data) {
+    onJoinGame(client) {
         joinRoom(this.server, client);
-        this.server.emit("test", "world");
     }
 };
 exports.socketGateway = socketGateway;
@@ -45,38 +44,49 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)('onJoinGame'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket]),
     __metadata("design:returntype", void 0)
 ], socketGateway.prototype, "onJoinGame", null);
 exports.socketGateway = socketGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ cors: true }),
     __metadata("design:paramtypes", [])
 ], socketGateway);
-function QueueWaiting(socket) {
+function QueueWaiting(io, socket) {
     if (object_1.roomSetting.queue.includes(socket.id))
         console.log("this player already exists in waiting room");
+    else if (checkSocket(socket))
+        console.log("player already exists in other room");
     else {
         if (object_1.roomSetting.queue.length < 3) {
             object_1.roomSetting.queue.push(socket.id);
             console.log("id ", socket.id, "is waiting");
+            if (object_1.roomSetting.queue.length == 1)
+                io.to(object_1.roomSetting.queue).emit("playerIsWaiting", true);
         }
     }
 }
 function joinRoom(io, socket) {
     const roomName = "room" + object_1.roomSetting.num;
     const roomInfo = io.sockets.adapter.rooms;
-    QueueWaiting(socket);
+    QueueWaiting(io, socket);
     if (object_1.roomSetting.queue.length == 2) {
         const Id = new Set(object_1.roomSetting.queue);
         roomInfo.set(roomName, Id);
         object_1.roomSetting.Rooms.set(roomName, object_1.roomSetting.queue);
+        io.to(roomName).emit("StartGame", true);
         object_1.roomSetting.queue = [];
         console.log("players ready to play in ", roomName);
-        io.to(roomName).emit("test", "hello");
         object_1.roomSetting.num += 1;
     }
 }
 ;
+function checkSocket(socket) {
+    for (let tmp of object_1.roomSetting.Rooms.values()) {
+        if (tmp.includes(socket.id))
+            return (true);
+    }
+    return (false);
+}
 function leaveQueue(io, socket) {
     object_1.roomSetting.queue.filter(value => value !== socket.id);
 }
