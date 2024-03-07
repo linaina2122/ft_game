@@ -1,10 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.roomSetting = void 0;
+exports.globalVar = exports.roomSetting = void 0;
 exports.roomSetting = {
     num: 1,
     Rooms: new Map(),
     Id: [],
-    queue: []
+    queue: [],
+    Game: new Map()
+};
+exports.globalVar = {
+    Width: 1600,
+    Height: 600
 };
 //# sourceMappingURL=object.js.map

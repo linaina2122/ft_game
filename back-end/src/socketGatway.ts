@@ -6,6 +6,7 @@ import { map } from "rxjs";
 import { Socket, Server } from "socket.io";
 import { roomSetting } from "./object";
 import { exit } from "process";
+import { Game } from "./Game";
 
 @WebSocketGateway({ cors: true }) // decorator telling that this class is hundelling websocket
 export class socketGateway {
@@ -65,6 +66,8 @@ function joinRoom(io: Server, socket: Socket) {
         const Id: Set<string> = new Set(roomSetting.queue)
         roomInfo.set(roomName, Id)
         roomSetting.Rooms.set(roomName, roomSetting.queue)
+       const game  = new Game(io, roomSetting.queue)
+        roomSetting.Game.set(roomName, game)
         io.to(roomName).emit("StartGame", true)
         roomSetting.queue = []
         console.log("players ready to play in ", roomName)

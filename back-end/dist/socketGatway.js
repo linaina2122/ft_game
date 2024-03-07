@@ -13,6 +13,7 @@ exports.socketGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const object_1 = require("./object");
+const Game_1 = require("./Game");
 let socketGateway = class socketGateway {
     constructor() {
         console.log("constructer called");
@@ -73,6 +74,7 @@ function joinRoom(io, socket) {
         const Id = new Set(object_1.roomSetting.queue);
         roomInfo.set(roomName, Id);
         object_1.roomSetting.Rooms.set(roomName, object_1.roomSetting.queue);
+        object_1.roomSetting.Game.set(roomName, new Game_1.Game(io, object_1.roomSetting.queue));
         io.to(roomName).emit("StartGame", true);
         object_1.roomSetting.queue = [];
         console.log("players ready to play in ", roomName);

@@ -11,16 +11,15 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const socketGatway_1 = require("./socketGatway");
-const game_controller_1 = require("./game/game.controller");
-const player1_controller_1 = require("./player2/player1/player1.controller");
+const Game_1 = require("./Game");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [],
-        controllers: [app_controller_1.AppController, game_controller_1.GameController, player1_controller_1.Player1Controller],
-        providers: [app_service_1.AppService, socketGatway_1.socketGateway],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService, socketGatway_1.socketGateway, Game_1.Game],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
