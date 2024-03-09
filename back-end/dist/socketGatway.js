@@ -74,14 +74,24 @@ function joinRoom(io, socket) {
         const Id = new Set(object_1.roomSetting.queue);
         roomInfo.set(roomName, Id);
         object_1.roomSetting.Rooms.set(roomName, object_1.roomSetting.queue);
-        object_1.roomSetting.Game.set(roomName, new Game_1.Game(io, object_1.roomSetting.queue));
         io.to(roomName).emit("StartGame", true);
-        object_1.roomSetting.queue = [];
         console.log("players ready to play in ", roomName);
+        const game = new Game_1.Game(io, object_1.roomSetting.queue);
+        object_1.roomSetting.Game.set(roomName, game);
+        object_1.roomSetting.queue = [];
         object_1.roomSetting.num += 1;
+        startGame(io, game);
     }
 }
 ;
+function startGame(io, game) {
+    var i = 1;
+    let interval = setInterval(() => {
+        game.Ball.positionX += 1 * i;
+        game.Ball.positionY += 1 * i;
+        io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
+    }, 1000 / 6);
+}
 function checkSocket(socket) {
     for (let tmp of object_1.roomSetting.Rooms.values()) {
         if (tmp.includes(socket.id))

@@ -7,6 +7,6 @@ import { Game } from './Game';
 @Module({
   imports: [],
   controllers: [AppController],
-  providers: [AppService, socketGateway, Game],
+  providers: [AppService, socketGateway],
 })
 export class AppModule {}

@@ -5,7 +5,7 @@ export var size = {
     height: window.innerHeight
 };
 
-let globalVar = {
+export let globalVar = {
     Width: 1600,
     Height: 600
 }
@@ -31,8 +31,8 @@ export var Ball = {
     cloneY: 0,
     radius: 25,
     segment: 100,
-    velocityX: 7,
-    velocityY: 7
+    velocityX: 2,
+    velocityY: 2
 };
 
 export var right_player = {
@@ -46,14 +46,16 @@ export var left_player = {
     height: 200,
     width: 50,
     positionX: ((globalVar.Width / + 2) - 25),
-    positionY: 0
-};
-
-export const player = {
-    user: "hello",
+    positionY: 0,
+    velocity: 10
 };
 
 export const buttonStyle = {
     height: 50,
     width: 70
 }
+
+export  var fromBack = {
+    posX : 0,
+    posY : 0,
+};

@@ -1,14 +1,17 @@
 import * as THREE from 'three'
-import { setup, right_player, left_player, Ball} from './objects';
+import { setup, right_player, left_player, Ball, fromBack} from './objects';
 import { rander_ball, puddles } from './create_objects';
 import { useEffect, useRef } from 'react';
-
+import { Player } from './App';
+function ball_animation(){
+    Ball.positionX += fromBack.posX;
+    Ball.positionY += fromBack.posY;
+}
 function rander(ball: any, L_puddle: any, R_puddle: any) {
     L_puddle.position.set(left_player.positionX, left_player.positionY, 0);
     R_puddle.position.set(right_player.positionX, right_player.positionY, 0);
     ball.position.set(Ball.positionX, Ball.positionY, 0);
-    // start_ball_animation()
-    // check_collision_right()
+    ball_animation()
     setup.renderer.render(setup.scene, setup.camera);
    
 
@@ -34,11 +37,12 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
         cub.position.set(0, 0, 0);
         setup.scene.add(cub);
         const ball = rander_ball();
-
         const R_puddle = puddles();
         const L_puddle = puddles();
 
+
         document.onkeydown = function (e) {
+            // TODO : send event to the back for the right puddle
             if (e.keyCode === 38) {
                 if (right_player.positionY > setup.Height - ((setup.Height / 2) + 100))
                     right_player.positionY += 0;
@@ -51,6 +55,27 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
                 else
                     right_player.positionY -= right_player.velocity;
             }
+            Player.emit("RplYer", right_player.positionY)
+            // }
+            // TODO : send event to the back for the left puddle
+                if (e.keyCode === 38) {
+                if (left_player.positionY > setup.Height - ((setup.Height / 2) + 100))
+                    left_player.positionY += 0;
+                else
+                    left_player.positionY += left_player.velocity;
+            }
+            else if (e.keyCode === 40) {
+                if (left_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
+                    left_player.positionY -= 0;
+                else
+                    left_player.positionY -= left_player.velocity;
+
+            }
+        //     // Player.emit("lPlayer", left_player.positionY)
+        // // }
+            Player.emit("LplYer", left_player.positionY)
+            console.log( left_player.positionY)
+            
         };
         setup.renderer.setAnimationLoop(() => {
             rander(ball, L_puddle, R_puddle);

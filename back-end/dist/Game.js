@@ -4,12 +4,9 @@ exports.Game = void 0;
 const object_1 = require("./object");
 class Game {
     constructor(io, client) {
-        this.rPlayer = new right_player();
         this.server = io;
         this.player = client;
-    }
-    initPlayer() {
-        console.log(this.rPlayer.positionX);
+        this.Ball = new Ball();
     }
 }
 exports.Game = Game;
@@ -21,28 +18,31 @@ class Ball {
         this.cloneY = 0;
         this.radius = 25;
         this.segment = 100;
-        this.velocityX = 7;
-        this.velocityY = 7;
+        this.velocityX = 2;
+        this.velocityY = 2;
     }
 }
 ;
 class right_player {
-    constructor() {
+    constructor(Id) {
         this.height = 200;
         this.width = 50;
         this.positionX = ((object_1.globalVar.Width / -2) + 25);
         this.positionY = 0;
         this.velocity = 10;
+        this.score = 0;
+        this.socket = Id;
     }
 }
 ;
 class left_player {
-    constructor() {
+    constructor(Id) {
         this.height = 200;
         this.width = 50;
         this.positionX = ((object_1.globalVar.Width / +2) + 25);
         this.positionY = 0;
         this.velocity = 10;
+        this.score = 0;
     }
 }
 //# sourceMappingURL=Game.js.map

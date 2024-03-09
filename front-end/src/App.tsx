@@ -1,8 +1,9 @@
 
 import { io, Socket } from "socket.io-client"
 import './App.css'
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import './style/WaitingPage.css'
+import { fromBack } from "./objects";
 
 import { InitSetup } from './rander_scene';
 
@@ -10,31 +11,47 @@ import { InitSetup } from './rander_scene';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 
-export const socket: Socket = io('http://localhost:3000', { autoConnect: true });
+export const Player: Socket = io('http://localhost:3000', { autoConnect: true });
 function SendData() {
-  socket.emit("onJoinGame");
+  Player.emit("onJoinGame");
 }
+
 
 function App() {
   const [connect, setSocket] = useState(false)
   const [isWaiting, setWaiting] = useState(false)
   const [isStart, setStart] = useState(false)
-
+  const [BposX, setPosX] = useState(0)
+  const [BposY, setPosY] = useState(0)
+  
+  
   function isConnect() {
-    socket.connected
+    Player.connected
     setSocket(true)
   }
-  socket.on("connect", isConnect)
+  Player.on("connect", isConnect)
+  console.log("Here")
 
-  socket.on("playerIsWaiting", (data: boolean) => {
+  Player.on("playerIsWaiting", (data: boolean) => {
     setWaiting(data)
-    console.log(isWaiting)
   })
 
-  socket.on("StartGame", (data: boolean) => {
+  Player.on("StartGame", (data: boolean) => {
     setWaiting(data)
-    console.log(isWaiting)
     setStart(true)
+  })
+  // Player.on("startGame", (dataX, dataY)=>{
+  //   setPosX(dataX);
+
+  //   setPosY(dataY);
+  // })
+  Player.on("startGame", (dataX, dataY)=>{
+    setPosX(dataX);
+    setPosY(dataY);
+    fromBack.posX = BposX;
+    fromBack.posY = BposY;
+    console.log("**********", fromBack.posX)
+    console.log("----------",fromBack.posY)
   })
 
   return (

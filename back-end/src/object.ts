@@ -10,6 +10,6 @@ export var roomSetting = {
 
 export const globalVar = {
     Width: 1600,
-    Height: 600
-}
+    Height: 200
+};
  

@@ -4,7 +4,7 @@ import { error } from "console";
 import { Http2ServerRequest } from "http2";
 import { map } from "rxjs";
 import { Socket, Server } from "socket.io";
-import { roomSetting } from "./object";
+import { roomSetting, globalVar } from "./object";
 import { exit } from "process";
 import { Game } from "./Game";
 
@@ -18,8 +18,6 @@ export class socketGateway {
 
     handleConnection(client: Socket) {
         console.log("user connected", client.id)
-        // this.server.emit("test", "world")
-
     }
     handleDisconnect(client: Socket) {
         console.log("user disconnected :", client.id)
@@ -27,7 +25,6 @@ export class socketGateway {
     @SubscribeMessage('test')
     ontest(client: Socket, MessageBody: string) {
         console.log("getting the event name ", MessageBody);
-        // this.server.emit("test", "responding from backend ")
     }
 
     @SubscribeMessage('onJoinGame')
@@ -66,14 +63,28 @@ function joinRoom(io: Server, socket: Socket) {
         const Id: Set<string> = new Set(roomSetting.queue)
         roomInfo.set(roomName, Id)
         roomSetting.Rooms.set(roomName, roomSetting.queue)
-       const game  = new Game(io, roomSetting.queue)
-        roomSetting.Game.set(roomName, game)
         io.to(roomName).emit("StartGame", true)
-        roomSetting.queue = []
         console.log("players ready to play in ", roomName)
+        const game  = new Game(io, roomSetting.queue)
+        roomSetting.Game.set(roomName, game)
+        roomSetting.queue = []
         roomSetting.num += 1
+        startGame(io, game);
     }
 };
+
+function startGame(io: Server, game : Game)
+{
+    var i = 1;
+    let interval =  setInterval(()=>{
+        game.Ball.positionX += 1 * i;           
+        game.Ball.positionY += 1 * i;
+        // console.log(game.Ball.positionY + game.Ball.radius)
+        // if(game.Ball.positionY + game.Ball.radius  > globalVar.Height - 200)
+        //     i *= -1;
+        io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
+     },1000/6)
+}
 
 function checkSocket(socket: Socket) {
     for (let tmp of roomSetting.Rooms.values()) {

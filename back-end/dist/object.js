@@ -10,6 +10,6 @@ exports.roomSetting = {
 };
 exports.globalVar = {
     Width: 1600,
-    Height: 600
+    Height: 200
 };
 //# sourceMappingURL=object.js.map
