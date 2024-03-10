@@ -1,11 +1,18 @@
 import * as THREE from 'three'
-import { setup, right_player, left_player, Ball, fromBack} from './objects';
+import { setup, right_player, left_player, Ball, fromBack, globalVar} from './objects';
 import { rander_ball, puddles } from './create_objects';
 import { useEffect, useRef } from 'react';
 import { Player } from './App';
+
+
 function ball_animation(){
-    Ball.positionX = fromBack.posX ;
-    Ball.positionY = fromBack.posY;
+    Ball.positionX += Ball.velocityX ;
+    Ball.positionY -= Ball.velocityY;
+    if((Ball.positionY - Ball.radius) > (globalVar.Height / 2) - (Ball.radius * 2))
+        Ball.velocityY *= -1
+    if((Ball.positionY + Ball.radius) * -1  > (globalVar.Height / 2) - (Ball.radius * 2))
+        Ball.velocityY *= -1
+    
 }
 function rander(ball: any, L_puddle: any, R_puddle: any) {
     L_puddle.position.set(left_player.positionX, left_player.positionY, 0);

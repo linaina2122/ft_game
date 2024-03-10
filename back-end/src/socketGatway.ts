@@ -75,16 +75,16 @@ function joinRoom(io: Server, socket: Socket) {
 
 function startGame(io: Server, game : Game)
 {
-    let interval =  setInterval(()=>{
-        game.Ball.positionX += game.Ball.velocityX ;
-        game.Ball.positionY -= game.Ball.velocityY;
-        // console.log(game.Ball.positionY + game.Ball.radius)
-        if((game.Ball.positionY - game.Ball.radius) > globalVar.Height - 350)
-            game.Ball.velocityY *= -1
-        if((game.Ball.positionY + game.Ball.radius) * -1  > (globalVar.Height / 2) - (game.Ball.radius * 2))
-            game.Ball.velocityY *= -1
-        io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
-     },1000/20)
+    // let interval =  setInterval(()=>{
+    //     // game.Ball.positionX += game.Ball.velocityX ;
+    //     // game.Ball.positionY -= game.Ball.velocityY;
+    //     // if((game.Ball.positionY - game.Ball.radius) > (globalVar.Height / 2) - (game.Ball.radius * 2))
+    //     //     game.Ball.velocityY *= -1
+    //     // if((game.Ball.positionY + game.Ball.radius) * -1  > (globalVar.Height / 2) - (game.Ball.radius * 2))
+    //     //     game.Ball.velocityY *= -1
+    //     // if(game.Ball.positionX )
+    //     io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
+    //  },1000/20)
 }
 
 function checkSocket(socket: Socket) {
