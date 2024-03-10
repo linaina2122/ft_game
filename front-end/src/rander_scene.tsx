@@ -1,11 +1,11 @@
 import * as THREE from 'three'
-import { setup, right_player, left_player, Ball, fromBack} from './objects';
+import { setup, right_player, left_player, Ball, fromBack, globalVar} from './objects';
 import { rander_ball, puddles } from './create_objects';
 import { useEffect, useRef } from 'react';
 import { Player } from './App';
 function ball_animation(){
-    Ball.positionX += fromBack.posX;
-    Ball.positionY += fromBack.posY;
+    Ball.positionX = fromBack.posX ;
+    Ball.positionY = fromBack.posY;
 }
 function rander(ball: any, L_puddle: any, R_puddle: any) {
     L_puddle.position.set(left_player.positionX, left_player.positionY, 0);

@@ -35,8 +35,8 @@ class Ball {
     cloneY = 0;
     radius = 25;
     segment = 100;
-    velocityX = 2;
-    velocityY = 2;
+    velocityX = 7;
+    velocityY = 7;
 
     constructor() { }
 };

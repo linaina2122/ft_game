@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 
-export var size = {
-    width: window.innerWidth,
-    height: window.innerHeight
-};
+// export var size = {
+//     width: window.innerWidth,
+//     height: window.innerHeight
+// };
 
-export let globalVar = {
+export var globalVar = {
     Width: 1600,
     Height: 600
 }
@@ -31,8 +31,8 @@ export var Ball = {
     cloneY: 0,
     radius: 25,
     segment: 100,
-    velocityX: 2,
-    velocityY: 2
+    velocityX: 7,
+    velocityY: 7
 };
 
 export var right_player = {

@@ -50,8 +50,6 @@ function App() {
     setPosY(dataY);
     fromBack.posX = BposX;
     fromBack.posY = BposY;
-    console.log("**********", fromBack.posX)
-    console.log("----------",fromBack.posY)
   })
 
   return (
