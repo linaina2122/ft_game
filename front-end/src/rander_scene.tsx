@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { setup, right_player, left_player, Ball, fromBack, globalVar} from './objects';
+import { setup, right_player, left_player, Ball, fromBack} from './objects';
 import { rander_ball, puddles } from './create_objects';
 import { useEffect, useRef } from 'react';
 import { Player } from './App';
