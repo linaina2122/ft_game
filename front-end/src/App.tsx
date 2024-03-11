@@ -6,6 +6,7 @@ import './style/WaitingPage.css'
 import { fromBack } from "./objects";
 
 import { InitSetup } from './rander_scene';
+import { Duel } from "./Duel";
 
 // import { useRef, useState } from 'react';
 // import reactLogo from './assets/react.svg'
@@ -16,11 +17,16 @@ function SendData() {
   Player.emit("onJoinGame");
 }
 
+function onVs(){
+  Player.emit("OneVSone")
+}
+
 
 function App() {
   const [connect, setSocket] = useState(false)
   const [isWaiting, setWaiting] = useState(false)
   const [isStart, setStart] = useState(false)
+  const [isDuo, setDuo] = useState(false)
   const [BposX, setPosX] = useState(0)
   const [BposY, setPosY] = useState(0)
   
@@ -40,11 +46,6 @@ function App() {
     setWaiting(data)
     setStart(true)
   })
-  // Player.on("startGame", (dataX, dataY)=>{
-  //   setPosX(dataX);
-
-  //   setPosY(dataY);
-  // })
   Player.on("startGame", (dataX, dataY)=>{
     setPosX(dataX);
     setPosY(dataY);
@@ -52,19 +53,32 @@ function App() {
     fromBack.posY = BposY;
   })
 
+  Player.on("vsOne", (data)=>{
+    setDuo(data)
+  })
+
+
+
   return (
     <div>
       {!isStart ? (
         <div id="StartButton" className="StartButton">
+          <button className="OneVsOne" onClick={onVs}>Play duo</button>
+          {isDuo ?(
+            // <Duel />
+            <InitSetup/>
+          ):(null)
+          }
           <button className="btn" onClick={SendData}>START GAME</button>
           {isWaiting ? (
             <div className="Try">waitingPage...</div>
           ) : (
-            null // Render nothing if not waiting
+            null 
           )}
         </div>
       ) : (
-        <InitSetup />
+        // <InitSetup />
+        <Duel />
       )}
     </div>
   );

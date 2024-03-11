@@ -2,10 +2,12 @@ import { Socket } from "socket.io";
 import { Game } from "./Game";
 export var roomSetting = {
     num: 1,
+    duel :1,
     Rooms: new Map<string, string[]>(),
     Id: [],
     queue: [],
-    Game : new Map<string, Game>()
+    Game : new Map<string, Game>(),
+    room : new Map<string, string>(),
 };
 
 export const globalVar = {

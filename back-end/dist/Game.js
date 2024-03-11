@@ -7,6 +7,8 @@ class Game {
         this.server = io;
         this.player = client;
         this.Ball = new Ball();
+        this.lPlayer = new left_player(this.player[0]);
+        this.rPlayer = new right_player(this.player[1]);
     }
 }
 exports.Game = Game;

@@ -3,10 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.globalVar = exports.roomSetting = void 0;
 exports.roomSetting = {
     num: 1,
+    duel: 1,
     Rooms: new Map(),
     Id: [],
     queue: [],
-    Game: new Map()
+    Game: new Map(),
+    room: new Map(),
 };
 exports.globalVar = {
     Width: 1600,

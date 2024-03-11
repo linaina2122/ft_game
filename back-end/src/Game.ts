@@ -4,7 +4,7 @@ import { globalVar } from "src/object";
 export class Game {
     private server: Server
     private player: any[]
-    // listener: any
+    listener: any
     lPlayer: any;
     rPlayer: any;
     Ball : any;
@@ -12,20 +12,12 @@ export class Game {
         this.server = io;
         this.player = client;
         this.Ball = new Ball();
-        // this.lPlayer = new left_player(this.player[0]);
-        // this.rPlayer = new right_player(this.player[1]);
-        // this.listener = this.server.on("lPlYer", (data)=>{
+        this.lPlayer = new left_player(this.player[0]);
+        this.rPlayer = new right_player(this.player[1]);
+        // this.listener = this.server.on("lPlayer", (data)=>{
         //     console.log(data)
-        //     console.log("here")
         // })
     }
-    
-//      StartGame(){
-//        let interval =  setInterval(()=>{
-//         this.Ball.positionX += 1;
-//         this.Ball.positionY += 1;
-//      },1000/6)
-//     }
 }
 
 class Ball {
@@ -35,8 +27,8 @@ class Ball {
     cloneY = 0;
     radius = 25;
     segment = 100;
-    velocityX = 7;
-    velocityY = 7;
+    velocityX = 2;
+    velocityY = 2;
 
     constructor() { }
 };

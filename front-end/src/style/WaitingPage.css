@@ -17,10 +17,24 @@
     transform: scale(3);
 }
 
+
 .Try{
     font-size: large;
+    color: black;
     height: 200vh;
     width: 100%;
     text-align: center;
     text-transform: capitalize;
+}
+.OneVsOne{
+    font-size: large;
+    font-weight: 100;
+    background-color: rgb(107, 3, 226) ;
+    text-align: center;
+    text-transform: uppercase;
+    transition: all 0.4s;
+}
+
+.OneVsOne:hover{
+    transform: scale(3);
 }
