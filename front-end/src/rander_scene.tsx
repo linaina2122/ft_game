@@ -1,18 +1,26 @@
 import * as THREE from 'three'
-import { setup, right_player, left_player, Ball, fromBack, globalVar} from './objects';
+import { setup, right_player, left_player, Ball, fromBack, globalVar, Values} from './objects';
 import { rander_ball, puddles } from './create_objects';
 import { useEffect, useRef } from 'react';
 import { Player } from './App';
 
-
+var player1 = 0;
+var player2 = 0;
 function ball_animation(){
     Ball.positionX += Ball.velocityX ;
-    Ball.positionY -= Ball.velocityY;
+    // Ball.positionY -= Ball.velocityY;
     if((Ball.positionY - Ball.radius) > (globalVar.Height / 2) - (Ball.radius * 2))
         Ball.velocityY *= -1
     if((Ball.positionY + Ball.radius) * -1  > (globalVar.Height / 2) - (Ball.radius * 2))
-        Ball.velocityY *= -1
-    
+        Ball.velocityY *= -1;
+    if(Ball.positionY > left_player.positionY + (globalVar.PuddleHeight / 2) ||
+     Ball.positionY < (left_player.positionY - (globalVar.PuddleHeight / 2)) ){
+            player1 +=1;
+    }
+    // console.log("Ball :", Ball.positionX + (Ball.radius * 2))
+    // console.log("player :", left_player.positionX)
+    if(Ball.positionX + (Ball.radius * 2) > left_player.positionX)
+        Ball.velocityX *= -1;
 }
 function rander(ball: any, L_puddle: any, R_puddle: any) {
     L_puddle.position.set(left_player.positionX, left_player.positionY, 0);
@@ -62,9 +70,9 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
                 else
                     right_player.positionY -= right_player.velocity;
             }
-            Player.emit("RplYer", right_player.positionY)
-            // }
-            // TODO : send event to the back for the left puddle
+        //     Player.emit("RplYer", right_player.positionY)
+        //     // }
+        //     // TODO : send event to the back for the left puddle
                 if (e.keyCode === 38) {
                 if (left_player.positionY > setup.Height - ((setup.Height / 2) + 100))
                     left_player.positionY += 0;
@@ -78,10 +86,10 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
                     left_player.positionY -= left_player.velocity;
 
             }
-        //     // Player.emit("lPlayer", left_player.positionY)
-        // // }
-            Player.emit("LplYer", left_player.positionY)
-            console.log( left_player.positionY)
+        // //     // Player.emit("lPlayer", left_player.positionY)
+        // // // }
+        //     Player.emit("LplYer", left_player.positionY)
+        //     console.log( left_player.positionY)
             
         };
         setup.renderer.setAnimationLoop(() => {

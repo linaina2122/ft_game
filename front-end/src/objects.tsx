@@ -28,13 +28,13 @@ export var Ball = {
     cloneY: 0,
     radius: 25,
     segment: 100,
-    velocityX: 7,
-    velocityY: 7
+    velocityX: 2,
+    velocityY: 2
 };
 
 export var right_player = {
-    height: 200,
-    width: 50,
+    height: 50,
+    width: 200,
     positionX: ((globalVar.Width / - 2) + 25),
     positionY: 0,
     velocity: 10
@@ -64,4 +64,11 @@ export var Values = {
     LeftPbottom : left_player.positionY + globalVar.PuddleWight,
     Pleft : left_player.positionX,
     Pright : right_player.positionX
+
+    /*var ball_top = Ball.positionY - Ball.radius;
+    var ball_bottom = Ball.positionY + Ball.radius;
+    var top = right_player.positionY; // check if ball touch ball from top
+    var bottom = right_player.positionY + right_player.height; //check if the ball touch the baddle from bottom
+    var right = right_player.positionX + right_player.width;
+    var ball_right = Ball.positionX + Ball.radius; */
 };
