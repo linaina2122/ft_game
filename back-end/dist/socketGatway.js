@@ -75,6 +75,8 @@ function joinRoom(io, socket) {
         io.to(roomName).emit("StartGame", true);
         console.log("players ready to play in ", roomName);
         const game = new Game_1.Game(io, object_1.roomSetting.queue);
+        io.to(object_1.roomSetting.queue[0]).emit("Puddle1", true);
+        io.to(object_1.roomSetting.queue[1]).emit("puddle2", true);
         object_1.roomSetting.Game.set(roomName, game);
         object_1.roomSetting.queue = [];
         object_1.roomSetting.num += 1;

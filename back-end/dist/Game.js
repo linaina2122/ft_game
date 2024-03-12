@@ -19,8 +19,8 @@ class Ball {
         this.cloneY = 0;
         this.radius = 25;
         this.segment = 100;
-        this.velocityX = 2;
-        this.velocityY = 2;
+        this.velocityX = 7;
+        this.velocityY = 7;
     }
 }
 ;

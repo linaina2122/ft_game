@@ -44,6 +44,8 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
         setup.camera.updateProjectionMatrix();
     });
 }
+var isRight = false;
+var isLeft = false;
 export function InitSetup() {
     const ref = useRef(null);
     useEffect(() => {
@@ -59,45 +61,59 @@ export function InitSetup() {
         const R_puddle = puddles();
         const L_puddle = puddles();
 
-        Player.on("left", (data : number) =>{
+        Player.on("left", (data: number) => {
             console.log(data);
             left_player.positionY = data;
         })
-        Player.on("right", (data : number) =>{
+        Player.on("right", (data: number) => {
             console.log(data);
             right_player.positionY = data;
         })
+        Player.on("Puddle1", (data) => {
+            console.log("puddle1",data)
+            isRight = data;
+        })
+        Player.on("puddle2", (data) => {
+            console.log("Puddle2:",data)
+            isLeft = data;
+        })
         document.onkeydown = function (e) {
-            if (e.keyCode === 38) {
-                if (right_player.positionY > setup.Height - ((setup.Height / 2) + 100))
+            // if(isRight){
+                if (e.keyCode === 38) {
+                    
+                    if (right_player.positionY > setup.Height - ((setup.Height / 2) + 100))
                     right_player.positionY += 0;
                 else
-                    right_player.positionY += right_player.velocity;
+                {
+                    right_player.positionY += 7;
+                    console.log(right_player.positionY)
+                }
             }
-            else if (e.keyCode === 40) {
-                if (right_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
-                    right_player.positionY -= 0;
-                else
-                    right_player.positionY -= right_player.velocity;
-            }
-
+                else if (e.keyCode === 40) {
+                    if (right_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
+                        right_player.positionY -= 0;
+                    else
+                        right_player.positionY -= right_player.velocity;
+                }
+            // }
             Player.emit("rPlayer", {
                 y: right_player.positionY
             });
-
-            if (e.keyCode === 38) {
-                if (left_player.positionY > setup.Height - ((setup.Height / 2) + 100))
-                    left_player.positionY += 0;
-                else
-                    left_player.positionY += left_player.velocity;
-            }
-            else if (e.keyCode === 40) {
-                if (left_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
-                    left_player.positionY -= 0;
-                else
-                    left_player.positionY -= left_player.velocity;
-
-            }
+            // if(isLeft){
+                // isRight = false;
+                if (e.keyCode === 38) {
+                    if (left_player.positionY > setup.Height - ((setup.Height / 2) + 100))
+                        left_player.positionY += 0;
+                    else
+                        left_player.positionY += left_player.velocity;
+                }
+                else if (e.keyCode === 40) {
+                    if (left_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
+                        left_player.positionY -= 0;
+                    else
+                        left_player.positionY -= left_player.velocity;
+                }
+            // }
             Player.emit("lPlayer", {
                 y: left_player.positionY
             });

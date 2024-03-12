@@ -29,19 +29,15 @@ function App() {
   const [isDuo, setDuo] = useState(false)
   const [BposX, setPosX] = useState(0)
   const [BposY, setPosY] = useState(0)
-  
-  
+  // const [userP, setP] = useState(false)
   function isConnect() {
     Player.connected
     setSocket(true)
   }
   Player.on("connect", isConnect)
-  console.log("Here")
-
   Player.on("playerIsWaiting", (data: boolean) => {
     setWaiting(data)
   })
-
   Player.on("StartGame", (data: boolean) => {
     setWaiting(data)
     setStart(true)
@@ -56,8 +52,6 @@ function App() {
   Player.on("vsOne", (data)=>{
     setDuo(data)
   })
-
-
 
   return (
     <div>

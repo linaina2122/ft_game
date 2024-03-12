@@ -89,9 +89,10 @@ function joinRoom(io: Server, socket: Socket) {
         roomInfo.set(roomName, Id)
         roomSetting.Rooms.set(roomName, roomSetting.queue)
         io.to(roomName).emit("StartGame", true)
-        
         console.log("players ready to play in ", roomName)
         const game  = new Game(io, roomSetting.queue)
+        io.to(roomSetting.queue[0]).emit("Puddle1", true);
+        io.to(roomSetting.queue[1]).emit("puddle2", true);
         roomSetting.Game.set(roomName, game)
         roomSetting.queue = []
         roomSetting.num += 1
@@ -108,10 +109,10 @@ function startGame(io: Server, game : Game)
             game.Ball.velocityY *= -1
         if((game.Ball.positionY + game.Ball.radius) * -1  > (globalVar.Height / 2) - (game.Ball.radius * 2))
             game.Ball.velocityY *= -1;
-        io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
-
+        
         game.lPlayer.pushToOther();
         game.rPlayer.pushToOther();
+        io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
      },1000/20)
 }
 
