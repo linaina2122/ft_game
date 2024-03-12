@@ -65,8 +65,7 @@ function App() {
         <div id="StartButton" className="StartButton">
           <button className="OneVsOne" onClick={onVs}>Play duo</button>
           {isDuo ?(
-            // <Duel />
-            <InitSetup/>
+            <Duel />
           ):(null)
           }
           <button className="btn" onClick={SendData}>START GAME</button>
@@ -77,8 +76,7 @@ function App() {
           )}
         </div>
       ) : (
-        // <InitSetup />
-        <Duel />
+        <InitSetup />
       )}
     </div>
   );

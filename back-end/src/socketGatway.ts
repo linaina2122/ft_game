@@ -32,10 +32,10 @@ export class socketGateway {
     onJoinGame(client: Socket) {
         joinRoom(this.server, client)
     }
-    @SubscribeMessage('OneVSone')
-    OneVSone(client: Socket){
-        OneGame(this.server, client);
-    }
+    // @SubscribeMessage('OneVSone')
+    // OneVSone(client: Socket){
+    //     OneGame(this.server, client);
+    // }
 
 
     //     @SubscribeMessage('leaveGame')
@@ -58,27 +58,27 @@ function QueueWaiting(io: Server, socket: Socket) {
     }
 }
 
-function OneGame(io : Server, socket:Socket){
+// function OneGame(io : Server, socket:Socket){
  
-    const RoomName = "duel" + roomSetting.duel;
-    const roomInfo = io.sockets.adapter.rooms;
-    if( Array.from(roomSetting.room.values()).includes(socket.id))
-        console.log("you are already existing in one room")
-    else{
-    roomSetting.room.set(RoomName, socket.id);
-    const tmp: Set<string> =new  Set(socket.id)
-    roomInfo.set(RoomName, tmp);
-    if (io.sockets.adapter.rooms.get(RoomName)?.has(socket.id)) {
-        console.log(`Socket ${socket.id} is in room ${RoomName}`);
-    } else {
-        console.log(`Socket ${socket.id} is NOT in room ${RoomName}`);
-    }
-    console.log(socket.id);
-    console.log("room :", RoomName , " is created")
-    io.emit("vsOne", true);
-    roomSetting.duel += 1;
-}
-}
+//     const RoomName = "duel" + roomSetting.duel;
+//     const roomInfo = io.sockets.adapter.rooms;
+//     if( Array.from(roomSetting.room.values()).includes(socket.id))
+//         console.log("you are already existing in one room")
+//     else{
+//     roomSetting.room.set(RoomName, socket.id);
+//     const tmp: Set<string> =new  Set(socket.id)
+//     roomInfo.set(RoomName, tmp);
+//     if (io.sockets.adapter.rooms.get(RoomName)?.has(socket.id)) {
+//         console.log(`Socket ${socket.id} is in room ${RoomName}`);
+//     } else {
+//         console.log(`Socket ${socket.id} is NOT in room ${RoomName}`);
+//     }
+//     console.log(socket.id);
+//     console.log("room :", RoomName , " is created")
+//     io.emit("vsOne", true);
+//     roomSetting.duel += 1;
+// }
+// }
 
 function joinRoom(io: Server, socket: Socket) {
     const roomName = "room" + roomSetting.num
@@ -89,6 +89,7 @@ function joinRoom(io: Server, socket: Socket) {
         roomInfo.set(roomName, Id)
         roomSetting.Rooms.set(roomName, roomSetting.queue)
         io.to(roomName).emit("StartGame", true)
+        
         console.log("players ready to play in ", roomName)
         const game  = new Game(io, roomSetting.queue)
         roomSetting.Game.set(roomName, game)
@@ -108,6 +109,9 @@ function startGame(io: Server, game : Game)
         if((game.Ball.positionY + game.Ball.radius) * -1  > (globalVar.Height / 2) - (game.Ball.radius * 2))
             game.Ball.velocityY *= -1;
         io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
+
+        game.lPlayer.pushToOther();
+        game.rPlayer.pushToOther();
      },1000/20)
 }
 

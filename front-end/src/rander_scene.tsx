@@ -1,11 +1,11 @@
 import * as THREE from 'three'
-import { setup, right_player, left_player, Ball, fromBack} from './objects';
+import { setup, right_player, left_player, Ball, fromBack } from './objects';
 import { rander_ball, puddles } from './create_objects';
 import { useEffect, useRef } from 'react';
 import { Player } from './App';
 
 
-function ball_animation(){
+function ball_animation() {
     Ball.positionX = fromBack.posX;
     Ball.positionY = fromBack.posY
     // Ball.positionX += Ball.velocityX ;
@@ -32,7 +32,7 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
     ball.position.set(Ball.positionX, Ball.positionY, 0);
     ball_animation()
     setup.renderer.render(setup.scene, setup.camera);
-   
+
 
     // resize for PerspectiveCamera
     window.addEventListener('resize', () => {
@@ -44,9 +44,9 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
         setup.camera.updateProjectionMatrix();
     });
 }
- export function InitSetup() {
+export function InitSetup() {
     const ref = useRef(null);
-    useEffect(()=>{
+    useEffect(() => {
         setup.renderer.setSize(innerWidth, innerHeight);
         document.body.appendChild(setup.renderer.domElement);
         setup.scene.add(setup.camera);
@@ -59,9 +59,15 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
         const R_puddle = puddles();
         const L_puddle = puddles();
 
-
+        Player.on("left", (data : number) =>{
+            console.log(data);
+            left_player.positionY = data;
+        })
+        Player.on("right", (data : number) =>{
+            console.log(data);
+            right_player.positionY = data;
+        })
         document.onkeydown = function (e) {
-            // TODO : send event to the back for the right puddle
             if (e.keyCode === 38) {
                 if (right_player.positionY > setup.Height - ((setup.Height / 2) + 100))
                     right_player.positionY += 0;
@@ -74,10 +80,12 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
                 else
                     right_player.positionY -= right_player.velocity;
             }
-        //     Player.emit("RplYer", right_player.positionY)
-        //     // }
-        //     // TODO : send event to the back for the left puddle
-                if (e.keyCode === 38) {
+
+            Player.emit("rPlayer", {
+                y: right_player.positionY
+            });
+
+            if (e.keyCode === 38) {
                 if (left_player.positionY > setup.Height - ((setup.Height / 2) + 100))
                     left_player.positionY += 0;
                 else
@@ -90,21 +98,20 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
                     left_player.positionY -= left_player.velocity;
 
             }
-        // //     // Player.emit("lPlayer", left_player.positionY)
-        // // // }
-        //     Player.emit("LplYer", left_player.positionY)
-        //     console.log( left_player.positionY)
-            
+            Player.emit("lPlayer", {
+                y: left_player.positionY
+            });
+
         };
         setup.renderer.setAnimationLoop(() => {
             rander(ball, L_puddle, R_puddle);
         });
-    return ()=> {
+        return () => {
 
-    };
-},[/*  */])
-return (
-    <div ref={ref}></div>
+        };
+    }, [/*  */])
+    return (
+        <div ref={ref}></div>
 
-  );
+    );
 };

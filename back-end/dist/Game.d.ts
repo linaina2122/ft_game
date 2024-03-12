@@ -1,7 +1,6 @@
 import { Server } from "socket.io";
 export declare class Game {
     private server;
-    private player;
     listener: any;
     lPlayer: any;
     rPlayer: any;
