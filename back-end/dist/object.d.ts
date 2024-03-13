@@ -11,4 +11,6 @@ export declare var roomSetting: {
 export declare const globalVar: {
     Width: number;
     Height: number;
+    PuddleHeight: number;
+    PuddleWight: number;
 };

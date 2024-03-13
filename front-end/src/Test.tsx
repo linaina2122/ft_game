@@ -7,6 +7,8 @@ import { fromBack } from "./objects";
 
 import { InitSetup } from './rander_scene';
 import { Duel } from "./Duel";
+import { useNavigate } from 'react-router-dom';
+
 
 // import { useRef, useState } from 'react';
 // import reactLogo from './assets/react.svg'
@@ -20,13 +22,13 @@ function SendData() {
 // function onVs(){
 //   Player.emit("OneVSone")
 // }
-
-
-function App() {
+var room2:string;
+function Test() {
   const [connect, setSocket] = useState(false)
   const [isWaiting, setWaiting] = useState(false)
   const [isStart, setStart] = useState(false)
   // const [isDuo, setDuo] = useState(false)
+  const navigate = useNavigate();
   const [BposX, setPosX] = useState(0)
   const [BposY, setPosY] = useState(0)
   // const [userP, setP] = useState(false)
@@ -41,9 +43,19 @@ function App() {
   Player.on("playerIsWaiting", (data: boolean) => {
     setWaiting(data)
   })
-  Player.on("StartGame", (data: boolean) => {
+
+  Player.on("forRouting", (data:string)=>{
+    console.log(data);
+    room2  = data;
+    
+
+    console.log("###########" +  data)
+})
+Player.on("StartGame", (data: boolean) => {
     setWaiting(data)
     setStart(true)
+    console.log("$$$$$$$$$$$" + room2);
+    navigate("/{room2}")
   })
   Player.on("startGame", (dataX, dataY)=>{
     setPosX(dataX);
@@ -74,4 +86,30 @@ function App() {
     </div>
   );
 }
-export default App;
+export default Test;
+
+
+// import React from 'react';
+// import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+// import Test from './Test';
+// import {InitSetup} from './rander_scene';
+
+// const App = () => {
+//   return (
+//     <Router>
+//       <Routes>
+//         {/* Main route */}
+//         <Route path="/" element={<Test />} />
+
+//         {/* Route with dynamic data */}
+//         <Route path="/:data" element={<InitSetup />} />
+
+//         {/* Redirection for unknown routes */}
+//         <Route path="*" element={<Navigate to="/" />} />
+//       </Routes>
+//     </Router>
+//   );
+// };
+
+// export default App;

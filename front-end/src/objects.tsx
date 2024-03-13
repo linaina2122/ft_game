@@ -28,8 +28,8 @@ export var Ball = {
     cloneY: 0,
     radius: 25,
     segment: 100,
-    velocityX: 7,
-    velocityY: 7
+    velocityX: 0.3,
+    velocityY: 0.3
 };
 
 export var right_player = {

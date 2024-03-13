@@ -12,6 +12,8 @@ exports.roomSetting = {
 };
 exports.globalVar = {
     Width: 1600,
-    Height: 600
+    Height: 600,
+    PuddleHeight: 200,
+    PuddleWight: 50,
 };
 //# sourceMappingURL=object.js.map

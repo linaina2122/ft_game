@@ -1,6 +1,6 @@
 import { Injectable, Logger, Post } from "@nestjs/common";
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { error } from "console";
+import { Console, error } from "console";
 import { Http2ServerRequest } from "http2";
 import { map } from "rxjs";
 import { Socket, Server } from "socket.io";
@@ -22,6 +22,8 @@ export class socketGateway {
     }
     handleDisconnect(client: Socket) {
         console.log("user disconnected :", client.id)
+        checkDectonnectin(this.server, client)
+
     }
     @SubscribeMessage('test')
     ontest(client: Socket, MessageBody: string) {
@@ -38,11 +40,11 @@ export class socketGateway {
     // }
 
 
-    //     @SubscribeMessage('leaveGame')
-    //     onLeaveGame(@MessageBody() data: any) {
-    //         console.log(data)
-    //         //TODO: leave room
-    //     }
+    //     //     @SubscribeMessage('leaveGame')
+    //     //     onLeaveGame(@MessageBody() data: any) {
+    //     //          checkDectonnectin(this.server, client)
+    //     //         
+    //     //     }
 }
 
 function QueueWaiting(io: Server, socket: Socket) {
@@ -59,7 +61,7 @@ function QueueWaiting(io: Server, socket: Socket) {
 }
 
 // function OneGame(io : Server, socket:Socket){
- 
+
 //     const RoomName = "duel" + roomSetting.duel;
 //     const roomInfo = io.sockets.adapter.rooms;
 //     if( Array.from(roomSetting.room.values()).includes(socket.id))
@@ -83,6 +85,7 @@ function QueueWaiting(io: Server, socket: Socket) {
 function joinRoom(io: Server, socket: Socket) {
     const roomName = "room" + roomSetting.num
     const roomInfo = io.sockets.adapter.rooms
+    console.log("are you here?");
     QueueWaiting(io, socket)
     if (roomSetting.queue.length == 2) {
         const Id: Set<string> = new Set(roomSetting.queue)
@@ -90,30 +93,54 @@ function joinRoom(io: Server, socket: Socket) {
         roomSetting.Rooms.set(roomName, roomSetting.queue)
         io.to(roomName).emit("StartGame", true)
         console.log("players ready to play in ", roomName)
-        const game  = new Game(io, roomSetting.queue)
+        const game = new Game(io, roomSetting.queue)
         io.to(roomSetting.queue[0]).emit("Puddle1", true);
-        io.to(roomSetting.queue[1]).emit("puddle2", true);
+        io.to(roomSetting.queue[1]).emit("Puddle2", true);
         roomSetting.Game.set(roomName, game)
         roomSetting.queue = []
         roomSetting.num += 1
+
         startGame(io, game);
     }
 };
 
-function startGame(io: Server, game : Game)
-{
-    let interval =  setInterval(()=>{
-        game.Ball.positionX += game.Ball.velocityX ;
-        game.Ball.positionY -= game.Ball.velocityY;
-        if((game.Ball.positionY - game.Ball.radius) > (globalVar.Height / 2) - (game.Ball.radius * 2))
-            game.Ball.velocityY *= -1
-        if((game.Ball.positionY + game.Ball.radius) * -1  > (globalVar.Height / 2) - (game.Ball.radius * 2))
-            game.Ball.velocityY *= -1;
-        
-        game.lPlayer.pushToOther();
-        game.rPlayer.pushToOther();
-        io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
-     },1000/20)
+function checkDectonnectin(io: Server, Socket: Socket) {
+    const roomInfo = io.sockets.adapter.rooms;
+    var RoomName : string;
+    for (const [roomName, room] of roomInfo.entries()) {
+        if (room.has(Socket.id)) {
+            RoomName = roomName;
+            Socket.leave(roomName);
+            console.log(Socket.id, "leaved ", roomName);
+            const socketId = Array.from(room);
+            for (const socket of socketId) {
+                const s = io.sockets.sockets.get(socket);
+                if (s) {
+                    // roomSetting.queue.push(s);
+                    // console.log(s.id, "is waiting for new game");
+                    console.log(s.id, "left ", roomName);
+                    s.leave(roomName);
+                }
+            }
+        }
+    }
+    leaveGame(RoomName);
+}
+
+
+function leaveGame(roomName){
+    for(const room of(roomSetting.Rooms.keys())){
+        if(room  == roomName){
+            roomSetting.Game.delete(room);
+            roomSetting.Rooms.delete(room);
+        }
+    }
+}
+
+
+function startGame(io: Server, game: Game) {
+    game.Ball.Ball(io)
+
 }
 
 function checkSocket(socket: Socket) {
@@ -126,4 +153,5 @@ function checkSocket(socket: Socket) {
 
 function leaveQueue(io: Server, socket: Socket) {
     roomSetting.queue.filter(value => value !== socket.id)
+
 }

@@ -23,6 +23,7 @@ let socketGateway = class socketGateway {
     }
     handleDisconnect(client) {
         console.log("user disconnected :", client.id);
+        checkDectonnectin(this.server, client);
     }
     ontest(client, MessageBody) {
         console.log("getting the event name ", MessageBody);
@@ -67,6 +68,7 @@ function QueueWaiting(io, socket) {
 function joinRoom(io, socket) {
     const roomName = "room" + object_1.roomSetting.num;
     const roomInfo = io.sockets.adapter.rooms;
+    console.log("are you here?");
     QueueWaiting(io, socket);
     if (object_1.roomSetting.queue.length == 2) {
         const Id = new Set(object_1.roomSetting.queue);
@@ -76,7 +78,7 @@ function joinRoom(io, socket) {
         console.log("players ready to play in ", roomName);
         const game = new Game_1.Game(io, object_1.roomSetting.queue);
         io.to(object_1.roomSetting.queue[0]).emit("Puddle1", true);
-        io.to(object_1.roomSetting.queue[1]).emit("puddle2", true);
+        io.to(object_1.roomSetting.queue[1]).emit("Puddle2", true);
         object_1.roomSetting.Game.set(roomName, game);
         object_1.roomSetting.queue = [];
         object_1.roomSetting.num += 1;
@@ -84,18 +86,36 @@ function joinRoom(io, socket) {
     }
 }
 ;
+function checkDectonnectin(io, Socket) {
+    const roomInfo = io.sockets.adapter.rooms;
+    var RoomName;
+    for (const [roomName, room] of roomInfo.entries()) {
+        if (room.has(Socket.id)) {
+            RoomName = roomName;
+            Socket.leave(roomName);
+            console.log(Socket.id, "leaved ", roomName);
+            const socketId = Array.from(room);
+            for (const socket of socketId) {
+                const s = io.sockets.sockets.get(socket);
+                if (s) {
+                    console.log(s.id, "left ", roomName);
+                    s.leave(roomName);
+                }
+            }
+        }
+    }
+    leaveGame(RoomName);
+}
+function leaveGame(roomName) {
+    for (const room of (object_1.roomSetting.Rooms.keys())) {
+        if (room == roomName) {
+            object_1.roomSetting.Game.delete(room);
+            object_1.roomSetting.Rooms.delete(room);
+        }
+    }
+}
 function startGame(io, game) {
-    let interval = setInterval(() => {
-        game.Ball.positionX += game.Ball.velocityX;
-        game.Ball.positionY -= game.Ball.velocityY;
-        if ((game.Ball.positionY - game.Ball.radius) > (object_1.globalVar.Height / 2) - (game.Ball.radius * 2))
-            game.Ball.velocityY *= -1;
-        if ((game.Ball.positionY + game.Ball.radius) * -1 > (object_1.globalVar.Height / 2) - (game.Ball.radius * 2))
-            game.Ball.velocityY *= -1;
-        io.emit("startGame", game.Ball.positionX, game.Ball.positionY);
-        game.lPlayer.pushToOther();
-        game.rPlayer.pushToOther();
-    }, 1000 / 20);
+    game.Ball.Ball(io);
 }
 function checkSocket(socket) {
     for (let tmp of object_1.roomSetting.Rooms.values()) {
