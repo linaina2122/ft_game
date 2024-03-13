@@ -21,27 +21,13 @@ class Ball {
         this.velocityY = 0.3;
         this.game = game;
     }
-    Ball(io) {
+    updatePosition(io) {
         this.positionX += this.velocityX;
         this.positionY -= this.velocityY;
-        if ((this.positionY - this.radius) > (object_1.globalVar.Height / 2) - (this.radius * 2))
-            this.velocityY *= -1;
-        if ((this.positionY + this.radius) * -1 > (object_1.globalVar.Height / 2) - (this.radius * 2))
-            this.velocityY *= -1;
-        if (this.positionY > this.game.lPlayer.positionY + (object_1.globalVar.PuddleHeight / 2) ||
-            this.positionY < (this.game.lPlayer.positionY - (object_1.globalVar.PuddleHeight / 2))) {
-            this.game.lPlayer.score += 1;
-        }
-        else {
-            if (this.positionX + (this.radius * 2) > this.game.lPlayer.positionX)
-                this.velocityX *= -1;
-            if (this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
-                this.velocityY *= -1;
-        }
-        let interval2 = setInterval(() => {
-            this.Ball(io);
-        }, 10000 / 20);
         let interval = setInterval(() => {
+            this.positionX += this.velocityX;
+            this.positionY -= this.velocityY;
+            console.log("the game started?");
             this.game.lPlayer.pushToOther();
             this.game.rPlayer.pushToOther();
             io.emit("startGame", this.positionX, this.positionY);

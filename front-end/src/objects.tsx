@@ -24,12 +24,12 @@ export const setup = {
 export var Ball = {
     positionX: 0,
     positionY: 0,
-    cloneX: 0,
-    cloneY: 0,
+    // cloneX: 0,
+    // cloneY: 0,
     radius: 25,
     segment: 100,
-    velocityX: 0.3,
-    velocityY: 0.3
+    // velocityX: 0.3,
+    // velocityY: 0.3
 };
 
 export var right_player = {

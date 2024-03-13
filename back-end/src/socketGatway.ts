@@ -139,7 +139,7 @@ function leaveGame(roomName){
 
 
 function startGame(io: Server, game: Game) {
-    game.Ball.Ball(io)
+    game.Ball.updatePosition(io)
 
 }
 

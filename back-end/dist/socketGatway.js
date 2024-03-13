@@ -115,7 +115,7 @@ function leaveGame(roomName) {
     }
 }
 function startGame(io, game) {
-    game.Ball.Ball(io);
+    game.Ball.updatePosition(io);
 }
 function checkSocket(socket) {
     for (let tmp of object_1.roomSetting.Rooms.values()) {

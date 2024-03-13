@@ -27,32 +27,34 @@ class Ball {
     constructor(game: Game) { 
         this.game = game;
     }
-    Ball(io: Server) {
+    updatePosition(io: Server) {
         this.positionX += this.velocityX;
         this.positionY -= this.velocityY;
-        if ((this.positionY - this.radius) > (globalVar.Height / 2) - (this.radius * 2))
-            this.velocityY *= -1
-        if ((this.positionY + this.radius) * -1 > (globalVar.Height / 2) - (this.radius * 2))
-            this.velocityY *= -1;
-        if (this.positionY > this.game.lPlayer.positionY + (globalVar.PuddleHeight / 2) ||
-            this.positionY < (this.game.lPlayer.positionY - (globalVar.PuddleHeight / 2))) {
-            this.game.lPlayer.score += 1;
-        }
-        else {
-        if(this.positionX + (this.radius * 2) > this.game.lPlayer.positionX)
-            this.velocityX *= -1;
-            if(this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
-            this.velocityY *= -1;
-        }
+        // if ((this.positionY - this.radius) > (globalVar.Height / 2) - (this.radius * 2))
+        //     this.velocityY *= -1
+        // if ((this.positionY + this.radius) * -1 > (globalVar.Height / 2) - (this.radius * 2))
+        //     this.velocityY *= -1;
+        // if (this.positionY > this.game.lPlayer.positionY + (globalVar.PuddleHeight / 2) ||
+        //     this.positionY < (this.game.lPlayer.positionY - (globalVar.PuddleHeight / 2))) {
+        //     this.game.lPlayer.score += 1;
+        // }
+        // else {
+        // if(this.positionX + (this.radius * 2) > this.game.lPlayer.positionX)
+        //     this.velocityX *= -1;
+        //     if(this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
+        //     this.velocityY *= -1;
+        // }
 
 
-    let interval2 = setInterval(() =>{
-        this.Ball(io);
-    } , 10000 /20);
-    let interval = setInterval(() => {
-
-        // this.Ball(io);
-        // console.log("the game started?");
+    // let interval2 = setInterval(() =>{
+        // } , 10000 /20);
+        let interval = setInterval(() => {
+            
+            // this.Ball(io);
+            this.positionX += this.velocityX;
+            this.positionY -= this.velocityY;
+            console.log("the game started?");
+           // this.updatePosition(io);
         this.game.lPlayer.pushToOther();
         this.game.rPlayer.pushToOther();
         io.emit("startGame", this.positionX, this.positionY);
