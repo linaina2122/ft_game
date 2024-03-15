@@ -7,13 +7,13 @@ exports.roomSetting = {
     Rooms: new Map(),
     Id: [],
     queue: [],
-    Game: new Map(),
     room: new Map(),
+    Game: new Map()
 };
 exports.globalVar = {
     Width: 1600,
     Height: 600,
     PuddleHeight: 200,
-    PuddleWight: 50,
+    PuddleWight: 50
 };
 //# sourceMappingURL=object.js.map

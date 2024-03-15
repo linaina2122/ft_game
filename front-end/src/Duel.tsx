@@ -4,7 +4,7 @@ import { rander_ball, puddles } from './create_objects';
 import { useEffect, useRef } from 'react';
 // import { rander } from './animation';
 
-var player1 = 0
+let player1 = 0
 
 export  function ball_animation(){
     Ball.positionX += Ball.velocityX ;

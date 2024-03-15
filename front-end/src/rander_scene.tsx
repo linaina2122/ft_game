@@ -26,8 +26,8 @@ function rander(ball: any, L_puddle: any, R_puddle: any) {
 
 export function InitSetup() {
     const ref = useRef(null);
-    var isRight = false;
-    var isLeft = false;
+    let isRight = false;
+    let isLeft = false;
     useEffect(() => {
         setup.renderer.setSize(innerWidth, innerHeight);
         document.body.appendChild(setup.renderer.domElement);

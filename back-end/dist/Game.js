@@ -3,8 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
 const object_1 = require("./object");
 class Game {
-    constructor(io, client) {
+    constructor(io, client, roomName) {
         this.server = io;
+        this.roomName = roomName;
         this.Ball = new Ball(this);
         this.lPlayer = new left_player(io, client[0], client[1]);
         this.rPlayer = new right_player(io, client[1], client[0]);
@@ -17,21 +18,37 @@ class Ball {
         this.positionY = 0;
         this.radius = 25;
         this.segment = 100;
-        this.velocityX = 0.3;
-        this.velocityY = 0.3;
+        this.velocityX = 2;
+        this.velocityY = 2;
         this.game = game;
     }
     updatePosition(io) {
-        this.positionX += this.velocityX;
-        this.positionY -= this.velocityY;
+        this.positionX -= this.velocityX;
+        this.positionY += this.velocityY;
+        console.log((this.positionY + this.radius));
+        console.log((object_1.globalVar.Height / 2) - (this.radius * 2));
+        if ((this.positionY - this.radius) * -1 > (object_1.globalVar.Height / 2) - 5)
+            this.velocityY *= -1;
+        if ((this.positionY + this.radius) > (object_1.globalVar.Height / 2) - 5)
+            this.velocityY *= -1;
+        if (this.positionY > this.game.lPlayer.positionY + (object_1.globalVar.PuddleHeight / 2) ||
+            this.positionY < (this.game.lPlayer.positionY - (object_1.globalVar.PuddleHeight / 2))) {
+            this.game.lPlayer.score += 1;
+        }
+        else {
+            if (this.positionX + (this.radius * 2) > this.game.lPlayer.positionX)
+                this.velocityX *= -1;
+            if (this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
+                this.velocityY *= -1;
+        }
+    }
+    start(io) {
         let interval = setInterval(() => {
-            this.positionX += this.velocityX;
-            this.positionY -= this.velocityY;
-            console.log("the game started?");
+            this.updatePosition(io);
             this.game.lPlayer.pushToOther();
             this.game.rPlayer.pushToOther();
-            io.emit("startGame", this.positionX, this.positionY);
-        }, 1000 / 20);
+            io.to(this.game.roomName).emit("startGame", this.positionX, this.positionY);
+        }, 1000 / 30);
     }
 }
 ;

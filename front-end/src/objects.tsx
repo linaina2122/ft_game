@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export var globalVar = {
+export let globalVar = {
     Width: 1600,
     Height: 600,
     PuddleHeight : 200,
@@ -21,7 +21,7 @@ export const setup = {
     Height: 600
 };
 
-export var Ball = {
+export let Ball = {
     positionX: 0,
     positionY: 0,
     // cloneX: 0,
@@ -32,7 +32,7 @@ export var Ball = {
     // velocityY: 0.3
 };
 
-export var right_player = {
+export let right_player = {
     height: 50,
     width: 200,
     positionX: ((globalVar.Width / - 2) + 25),
@@ -40,7 +40,7 @@ export var right_player = {
     velocity: 12
 };
 
-export var left_player = {
+export let left_player = {
     height: 200,
     width: 50,
     positionX: ((globalVar.Width / + 2) - 25),
@@ -48,7 +48,7 @@ export var left_player = {
     velocity: 12
 };
 
-export  var fromBack = {
+export  let fromBack = {
     posX : 0,
     posY : 0,
 };

@@ -2,7 +2,7 @@
 // import { setup, right_player, left_player, Ball, globalVar} from './objects';
 
 
-// var player1 = 0
+// let player1 = 0
 
 // export  function ball_animation(){
 //     Ball.positionX += Ball.velocityX ;

@@ -22,7 +22,7 @@ function SendData() {
 // function onVs(){
 //   Player.emit("OneVSone")
 // }
-var room2:string;
+let room2:string;
 function Test() {
   const [connect, setSocket] = useState(false)
   const [isWaiting, setWaiting] = useState(false)

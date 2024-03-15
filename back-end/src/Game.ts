@@ -1,14 +1,15 @@
 import { Server } from "socket.io";
-import { globalVar } from "src/object"
+import { globalVar, roomSetting } from "src/object"
 
 export class Game {
     private server: Server
-    listener: any
+    roomName: string;
     lPlayer: any;
     rPlayer: any;
-    Ball : any;
-    constructor(io: Server, client: any[]) {
+    Ball: any;
+    constructor(io: Server, client: any[], roomName: string) {
         this.server = io;
+        this.roomName = roomName;
         this.Ball = new Ball(this);
         this.lPlayer = new left_player(io, client[0], client[1]);
         this.rPlayer = new right_player(io, client[1], client[0]);
@@ -20,53 +21,47 @@ class Ball {
     positionY = 0;
     radius = 25;
     segment = 100;
-    velocityX = 0.3;
-    velocityY = 0.3;
-    game : Game;
+    velocityX = 2;
+    velocityY = 2;
+    game: Game;
 
-    constructor(game: Game) { 
+    constructor(game: Game) {
         this.game = game;
     }
+
     updatePosition(io: Server) {
-        this.positionX += this.velocityX;
-        this.positionY -= this.velocityY;
-        // if ((this.positionY - this.radius) > (globalVar.Height / 2) - (this.radius * 2))
-        //     this.velocityY *= -1
-        // if ((this.positionY + this.radius) * -1 > (globalVar.Height / 2) - (this.radius * 2))
-        //     this.velocityY *= -1;
-        // if (this.positionY > this.game.lPlayer.positionY + (globalVar.PuddleHeight / 2) ||
-        //     this.positionY < (this.game.lPlayer.positionY - (globalVar.PuddleHeight / 2))) {
-        //     this.game.lPlayer.score += 1;
-        // }
-        // else {
-        // if(this.positionX + (this.radius * 2) > this.game.lPlayer.positionX)
-        //     this.velocityX *= -1;
-        //     if(this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
-        //     this.velocityY *= -1;
-        // }
-
-
-    // let interval2 = setInterval(() =>{
-        // } , 10000 /20);
-        let interval = setInterval(() => {
-            
-            // this.Ball(io);
-            this.positionX += this.velocityX;
-            this.positionY -= this.velocityY;
-            console.log("the game started?");
-           // this.updatePosition(io);
-        this.game.lPlayer.pushToOther();
-        this.game.rPlayer.pushToOther();
-        io.emit("startGame", this.positionX, this.positionY);
-    }, 1000 / 20)
+        this.positionX -= this.velocityX;
+        this.positionY += this.velocityY;
+        console.log((this.positionY + this.radius))
+        console.log((globalVar.Height / 2) - (this.radius * 2))
+        if ((this.positionY - this.radius) * -1 > (globalVar.Height / 2) - 5)
+            this.velocityY *= -1;
+        if ((this.positionY + this.radius)  > (globalVar.Height / 2) - 5)
+            this.velocityY *= -1;
+        if (this.positionY > this.game.lPlayer.positionY + (globalVar.PuddleHeight / 2) ||
+            this.positionY < (this.game.lPlayer.positionY - (globalVar.PuddleHeight / 2))) {
+            this.game.lPlayer.score += 1;
+        }
+        else {
+            if (this.positionX + (this.radius * 2) > this.game.lPlayer.positionX)
+                this.velocityX *= -1;
+            if (this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
+                this.velocityY *= -1;
+    }
 }
-
-    // fill with all logic of ball
+    start(io : Server){
+            let interval = setInterval(() => {
+                this.updatePosition(io)
+                this.game.lPlayer.pushToOther();
+                this.game.rPlayer.pushToOther();
+                io.to(this.game.roomName).emit("startGame", this.positionX, this.positionY);
+            }, 1000 / 30)
+        }
 };
 
 class right_player {
-    server:any;
-    socket:any;
+    server: any;
+    socket: any;
 
     height = 200;
     width = 50;
@@ -75,12 +70,12 @@ class right_player {
     velocity = 10;
     score = 0;
 
-    constructor(server:Server, myId: any ,otherId: any) {
+    constructor(server: Server, myId: any, otherId: any) {
         this.server = server;
         this.socket = otherId;
         let rPlayer = (data: { y: number }) => {
-			this.positionY = data.y;
-		}
+            this.positionY = data.y;
+        }
         let listen = server.sockets.sockets.get(myId);
         listen.on("rPlayer", rPlayer);
     }
@@ -91,8 +86,8 @@ class right_player {
 };
 
 class left_player {
-    server:any;
-    socket:any;
+    server: any;
+    socket: any;
 
     height = 200;
     width = 50;
@@ -101,12 +96,12 @@ class left_player {
     velocity = 10;
     score = 0;
 
-    constructor(server:Server, myId: any ,otherId: any) {
+    constructor(server: Server, myId: any, otherId: any) {
         this.server = server;
         this.socket = otherId;
         let lPlayer = (data: { y: number }) => {
-			this.positionY = data.y;
-		}
+            this.positionY = data.y;
+        }
         let listen = server.sockets.sockets.get(myId);
         listen.on("lPlayer", lPlayer);
     }

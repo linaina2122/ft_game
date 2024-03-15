@@ -68,7 +68,7 @@ function QueueWaiting(io, socket) {
 function joinRoom(io, socket) {
     const roomName = "room" + object_1.roomSetting.num;
     const roomInfo = io.sockets.adapter.rooms;
-    console.log("are you here?");
+    let game;
     QueueWaiting(io, socket);
     if (object_1.roomSetting.queue.length == 2) {
         const Id = new Set(object_1.roomSetting.queue);
@@ -76,7 +76,7 @@ function joinRoom(io, socket) {
         object_1.roomSetting.Rooms.set(roomName, object_1.roomSetting.queue);
         io.to(roomName).emit("StartGame", true);
         console.log("players ready to play in ", roomName);
-        const game = new Game_1.Game(io, object_1.roomSetting.queue);
+        game = new Game_1.Game(io, object_1.roomSetting.queue, roomName);
         io.to(object_1.roomSetting.queue[0]).emit("Puddle1", true);
         io.to(object_1.roomSetting.queue[1]).emit("Puddle2", true);
         object_1.roomSetting.Game.set(roomName, game);
@@ -88,7 +88,7 @@ function joinRoom(io, socket) {
 ;
 function checkDectonnectin(io, Socket) {
     const roomInfo = io.sockets.adapter.rooms;
-    var RoomName;
+    let RoomName;
     for (const [roomName, room] of roomInfo.entries()) {
         if (room.has(Socket.id)) {
             RoomName = roomName;
@@ -115,7 +115,7 @@ function leaveGame(roomName) {
     }
 }
 function startGame(io, game) {
-    game.Ball.updatePosition(io);
+    game.Ball.start(io);
 }
 function checkSocket(socket) {
     for (let tmp of object_1.roomSetting.Rooms.values()) {

@@ -1,12 +1,12 @@
 import { Game } from "./Game";
-export declare var roomSetting: {
+export declare let roomSetting: {
     num: number;
     duel: number;
     Rooms: Map<string, string[]>;
     Id: any[];
     queue: any[];
-    Game: Map<string, Game>;
     room: Map<string, string>;
+    Game: Map<string, Game>;
 };
 export declare const globalVar: {
     Width: number;
