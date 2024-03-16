@@ -21,34 +21,36 @@ class Ball {
     positionY = 0;
     radius = 25;
     segment = 100;
-    velocityX = 2;
-    velocityY = 2;
+    velocityX = 5;
+    velocityY = 5;
     game: Game;
 
     constructor(game: Game) {
         this.game = game;
     }
-
-    updatePosition(io: Server) {
-        this.positionX -= this.velocityX;
-        this.positionY += this.velocityY;
-        console.log((this.positionY + this.radius))
-        console.log((globalVar.Height / 2) - (this.radius * 2))
+    checkCollision(){
         if ((this.positionY - this.radius) * -1 > (globalVar.Height / 2) - 5)
             this.velocityY *= -1;
         if ((this.positionY + this.radius)  > (globalVar.Height / 2) - 5)
             this.velocityY *= -1;
-        if (this.positionY > this.game.lPlayer.positionY + (globalVar.PuddleHeight / 2) ||
-            this.positionY < (this.game.lPlayer.positionY - (globalVar.PuddleHeight / 2))) {
+        if (this.positionY > this.game.lPlayer.positionY + (globalVar.PuddleHeight / 2))
+            // this.positionY < (this.game.lPlayer.positionY - (globalVar.PuddleHeight / 2)))
             this.game.lPlayer.score += 1;
-        }
-        else {
-            if (this.positionX + (this.radius * 2) > this.game.lPlayer.positionX)
-                this.velocityX *= -1;
-            if (this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
-                this.velocityY *= -1;
+            // console.log("score is :", this.game.lPlayer.score);}
     }
+
+    updatePosition(io: Server) {
+        this.positionX += this.velocityX;
+        this.positionY -= this.velocityY;
+        this.checkCollision();
+        // console.log("ball x pos: ", this.positionX);
+        // console.log("padll x pos: ", this.game.lPlayer.positionX);
+        if ((this.positionX + (this.radius * 2))  > (this.game.lPlayer.positionX) && (this.positionY < (this.game.lPlayer.positionY + globalVar.PuddleHeight / 2)))
+            this.velocityX *= -1;
+//             if (this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
+//                 this.velocityY *= -1;
 }
+
     start(io : Server){
             let interval = setInterval(() => {
                 this.updatePosition(io)
@@ -57,6 +59,7 @@ class Ball {
                 io.to(this.game.roomName).emit("startGame", this.positionX, this.positionY);
             }, 1000 / 30)
         }
+
 };
 
 class right_player {
@@ -65,7 +68,7 @@ class right_player {
 
     height = 200;
     width = 50;
-    positionX = ((globalVar.Width / - 2) + 25);
+    positionX = ((globalVar.Width / -2) + 25);
     positionY = 0;
     velocity = 10;
     score = 0;
@@ -91,7 +94,7 @@ class left_player {
 
     height = 200;
     width = 50;
-    positionX = ((globalVar.Width / + 2) + 25);
+    positionX = ((globalVar.Width / 2) - 25);
     positionY = 0;
     velocity = 10;
     score = 0;

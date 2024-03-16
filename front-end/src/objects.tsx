@@ -37,7 +37,7 @@ export let right_player = {
     width: 200,
     positionX: ((globalVar.Width / - 2) + 25),
     positionY: 0,
-    velocity: 12
+    velocity: 10
 };
 
 export let left_player = {
@@ -45,7 +45,7 @@ export let left_player = {
     width: 50,
     positionX: ((globalVar.Width / + 2) - 25),
     positionY: 0,
-    velocity: 12
+    velocity: 10
 };
 
 export  let fromBack = {

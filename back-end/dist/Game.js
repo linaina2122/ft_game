@@ -18,29 +18,24 @@ class Ball {
         this.positionY = 0;
         this.radius = 25;
         this.segment = 100;
-        this.velocityX = 2;
-        this.velocityY = 2;
+        this.velocityX = 5;
+        this.velocityY = 5;
         this.game = game;
     }
-    updatePosition(io) {
-        this.positionX -= this.velocityX;
-        this.positionY += this.velocityY;
-        console.log((this.positionY + this.radius));
-        console.log((object_1.globalVar.Height / 2) - (this.radius * 2));
+    checkCollision() {
         if ((this.positionY - this.radius) * -1 > (object_1.globalVar.Height / 2) - 5)
             this.velocityY *= -1;
         if ((this.positionY + this.radius) > (object_1.globalVar.Height / 2) - 5)
             this.velocityY *= -1;
-        if (this.positionY > this.game.lPlayer.positionY + (object_1.globalVar.PuddleHeight / 2) ||
-            this.positionY < (this.game.lPlayer.positionY - (object_1.globalVar.PuddleHeight / 2))) {
+        if (this.positionY > this.game.lPlayer.positionY + (object_1.globalVar.PuddleHeight / 2))
             this.game.lPlayer.score += 1;
-        }
-        else {
-            if (this.positionX + (this.radius * 2) > this.game.lPlayer.positionX)
-                this.velocityX *= -1;
-            if (this.game.Ball.positionX - (this.game.Ball.radius * 2) < this.game.rPlayer.positionX)
-                this.velocityY *= -1;
-        }
+    }
+    updatePosition(io) {
+        this.positionX += this.velocityX;
+        this.positionY -= this.velocityY;
+        this.checkCollision();
+        if ((this.positionX + (this.radius * 2)) > (this.game.lPlayer.positionX) && (this.positionY < (this.game.lPlayer.positionY + object_1.globalVar.PuddleHeight / 2)))
+            this.velocityX *= -1;
     }
     start(io) {
         let interval = setInterval(() => {
@@ -77,7 +72,7 @@ class left_player {
     constructor(server, myId, otherId) {
         this.height = 200;
         this.width = 50;
-        this.positionX = ((object_1.globalVar.Width / +2) + 25);
+        this.positionX = ((object_1.globalVar.Width / 2) - 25);
         this.positionY = 0;
         this.velocity = 10;
         this.score = 0;
