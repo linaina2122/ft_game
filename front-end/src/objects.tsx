@@ -24,12 +24,8 @@ export const setup = {
 export let Ball = {
     positionX: 0,
     positionY: 0,
-    // cloneX: 0,
-    // cloneY: 0,
     radius: 25,
     segment: 100,
-    // velocityX: 0.3,
-    // velocityY: 0.3
 };
 
 export let right_player = {
@@ -37,7 +33,7 @@ export let right_player = {
     width: 200,
     positionX: ((globalVar.Width / - 2) + 25),
     positionY: 0,
-    velocity: 10
+    velocity: 25
 };
 
 export let left_player = {
@@ -45,7 +41,7 @@ export let left_player = {
     width: 50,
     positionX: ((globalVar.Width / + 2) - 25),
     positionY: 0,
-    velocity: 10
+    velocity: 25
 };
 
 export  let fromBack = {

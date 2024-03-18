@@ -60,11 +60,11 @@ export function InitSetup() {
                     if (right_player.positionY > setup.Height - ((setup.Height / 2) + 100))
                         right_player.positionY += 0;
                 else
-                    right_player.positionY += 7;
+                    right_player.positionY += right_player.velocity;
             }
                 else if (e.keyCode === 40) {
                     if (right_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
-                        right_player.positionY -= 0;
+                        right_player.positionY += 0 ;
                     else
                         right_player.positionY -= right_player.velocity;
                 }
@@ -75,13 +75,13 @@ export function InitSetup() {
             if(isLeft){
                 if (e.keyCode === 38) {
                     if (left_player.positionY > setup.Height - ((setup.Height / 2) + 100))
-                        left_player.positionY += 0;
+                        left_player.positionY += 0 ;
                     else
                         left_player.positionY += left_player.velocity;
                 }
                 else if (e.keyCode === 40) {
                     if (left_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
-                        left_player.positionY -= 0;
+                        left_player.positionY += 0 ;
                     else
                         left_player.positionY -= left_player.velocity;
                 }

@@ -19,7 +19,7 @@ class right_player {
         this.width = 50;
         this.positionX = ((object_1.globalVar.Width / -2) + 25);
         this.positionY = 0;
-        this.velocity = 15;
+        this.velocity = 25;
         this.score = 0;
         this.server = server;
         this.socket = otherId;
@@ -40,7 +40,7 @@ class left_player {
         this.width = 50;
         this.positionX = ((object_1.globalVar.Width / 2) - 25);
         this.positionY = 0;
-        this.velocity = 15;
+        this.velocity = 25;
         this.score = 0;
         this.server = server;
         this.socket = otherId;

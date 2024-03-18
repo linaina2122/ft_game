@@ -1,13 +1,14 @@
 import { Game } from "./Game";
 import { Server } from "socket.io";
 export declare class Ball {
+    game: Game;
     positionX: number;
     positionY: number;
     radius: number;
     segment: number;
     velocityX: number;
     velocityY: number;
-    game: Game;
+    speed: number;
     constructor(game: Game);
     checkCollision(): void;
     resetBall(): void;
