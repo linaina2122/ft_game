@@ -1,17 +1,13 @@
 
 import { io, Socket } from "socket.io-client"
-import './App.css'
 import { useEffect, useState } from "react";
 import './style/WaitingPage.css'
 import { fromBack } from "./objects";
-
 import { InitSetup } from './rander_scene';
 import { Duel } from "./Duel";
 
-// import { useRef, useState } from 'react';
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-
+let leftPlayerScore = 0;
+let rightPlayerScore = 0;
 export const Player: Socket = io('http://localhost:3000', { autoConnect: true });
 function SendData() {
   Player.emit("onJoinGame");
@@ -26,16 +22,16 @@ function App() {
   const [connect, setSocket] = useState(false)
   const [isWaiting, setWaiting] = useState(false)
   const [isStart, setStart] = useState(false)
+  
+  
   // const [isDuo, setDuo] = useState(false)
   const [BposX, setPosX] = useState(0)
   const [BposY, setPosY] = useState(0)
-  // const [userP, setP] = useState(false)
   useEffect(()=>{
   function isConnect() {
     Player.connected
     setSocket(true)
   }
-  console.log("here")
   Player.on("connect", isConnect)
 },[])
   Player.on("playerIsWaiting", (data: boolean) => {
@@ -55,8 +51,15 @@ function App() {
   // Player.on("vsOne", (data)=>{
   //   setDuo(data)
   // })
-  console.log(isWaiting)
-
+  useEffect(()=>{
+  Player.on("Lplayer_score", (data : boolean)=>{
+    leftPlayerScore++;
+    console.log("lscore", leftPlayerScore);
+  })
+  Player.on("Rplayer_score", (data : number)=>{
+    rightPlayerScore++;
+    console.log("rscore :", rightPlayerScore);
+  })},[])
   return (
     <div>
       {!isStart ? (
@@ -65,7 +68,7 @@ function App() {
           {isWaiting ? (
             <div className="Try">waitingPage...</div>
           ) : (
-            null // Render nothing if not waiting
+            null 
           )}
         </div>
       ) : (

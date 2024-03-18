@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { setup, right_player, left_player, Ball, fromBack, globalVar } from './objects';
+import { setup, right_player, left_player, Ball, fromBack} from './objects';
 import { rander_ball, puddles } from './create_objects';
 import { useEffect, useRef } from 'react';
 import { Player } from './App';
@@ -43,7 +43,6 @@ export function InitSetup() {
         Player.on("Puddle2", (data) => {
             isRight = data;
             Player.on("left", (data: number) => {
-                console.log(data);
                 left_player.positionY = data;
             })
         })
@@ -53,44 +52,45 @@ export function InitSetup() {
                 right_player.positionY = data;
             })
         })
-        document.onkeydown = function (e) {
+        window.addEventListener('keydown',(event)=>{
             if(isRight){
-                if (e.keyCode === 38) {
+                if (event.keyCode == 38) {
                     
-                    if (right_player.positionY > setup.Height - ((setup.Height / 2) + 100))
+                    if (right_player.positionY > setup.Height - ((setup.Height / 2) + 103))
                         right_player.positionY += 0;
                 else
-                    right_player.positionY += right_player.velocity;
+                    right_player.positionY += (right_player.velocity + right_player.speed);
             }
-                else if (e.keyCode === 40) {
-                    if (right_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
+                else if (event.keyCode === 40) {
+                    if (right_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 103)))
                         right_player.positionY += 0 ;
                     else
-                        right_player.positionY -= right_player.velocity;
+                        right_player.positionY -= (right_player.velocity + right_player.speed);
                 }
                 Player.emit("rPlayer", {
                     y: right_player.positionY
                 });
             }
+
             if(isLeft){
-                if (e.keyCode === 38) {
-                    if (left_player.positionY > setup.Height - ((setup.Height / 2) + 100))
+                if (event.keyCode === 38) {
+                    if (left_player.positionY > setup.Height - ((setup.Height / 2) + 103))
                         left_player.positionY += 0 ;
                     else
-                        left_player.positionY += left_player.velocity;
+                        left_player.positionY += (left_player.velocity + right_player.speed);
                 }
-                else if (e.keyCode === 40) {
-                    if (left_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 100)))
+                else if (event.keyCode === 40) {
+                    if (left_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 103)))
                         left_player.positionY += 0 ;
                     else
-                        left_player.positionY -= left_player.velocity;
+                        left_player.positionY -= (left_player.velocity + right_player.speed);
                 }
             Player.emit("lPlayer", {
                 y: left_player.positionY
             });
-            }
 
-        };
+            }
+        })
         setup.renderer.setAnimationLoop(() => {
             rander(ball, L_puddle, R_puddle);
         });

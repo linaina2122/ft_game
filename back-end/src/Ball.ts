@@ -12,23 +12,25 @@ export class Ball {
     segment = 100;
     velocityX = 5;
     velocityY = 5;
-    speed = 1;
+    speed = 0.5;
 
     constructor(game: Game) {
         this.game = game;
     }
-    checkCollision(){
+    checkCollision(io : Server){
         if ((this.positionY - this.radius) * -1 > (globalVar.Height / 2) - 5)
             this.velocityY *= -1;
         if ((this.positionY + this.radius)  > (globalVar.Height / 2) - 5)
             this.velocityY *= -1;
         if (this.positionX < this.game.rPlayer.positionX - 25){
-            this.game.lPlayer.score += 1;
             console.log("score is :", this.game.lPlayer.score);
+            this.game.lPlayer.score += 1;
+            io.to(this.game.roomName).emit("Lplayer_score", true);
             this.resetBall();
         }
         if (this.positionX > this.game.lPlayer.positionX  + 25){
             this.game.rPlayer.score += 1;
+            io.to(this.game.roomName).emit("Rplayer_score",true);
             console.log("score is :", this.game.rPlayer.score);
             this.resetBall();
         }
@@ -38,7 +40,6 @@ export class Ball {
         this.game.Ball.positionY = 0;
         this.velocityX = 5;
         this.velocityY = 5;
-        this.speed = 0.1;
     }
 
     leftPlayer(){
@@ -50,14 +51,14 @@ export class Ball {
             this.velocityX += this.speed;
             this.velocityY += this.speed;
         }
-        if((this.positionX > this.game.lPlayer.positionX && this.positionY > 0 ) &&  
+        if((this.positionX > (this.game.lPlayer.positionX + 25) && this.positionY > 0 ) &&  
         (this.positionY - this.radius) < this.game.lPlayer.positionY + globalVar.PuddleHeight / 2){
             this.positionY += this.radius;
             this.velocityY *= -1;
         }
-        if((this.positionX > this.game.lPlayer.positionX && this.positionY < 0 ) &&  
-        (this.positionY + this.radius) > this.game.lPlayer.positionY - globalVar.PuddleHeight / 2){
-            this.positionY += this.radius;
+        if(((this.positionX > (this.game.lPlayer.positionX + 25) && (this.positionY < 0 ) &&  
+        (this.positionY + this.radius) > this.game.lPlayer.positionY - globalVar.PuddleHeight / 2))){
+            this.positionY -= this.radius;
             this.velocityY *= -1;
         }
     }
@@ -70,12 +71,22 @@ export class Ball {
             this.velocityX += this.speed;
             this.velocityY += this.speed; 
         }
+        if((this.positionX > (this.game.lPlayer.positionX - 25) && this.positionY > 0 ) &&  
+        (this.positionY - this.radius) < this.game.lPlayer.positionY + globalVar.PuddleHeight / 2){
+            this.positionY += this.radius;
+            this.velocityY *= -1;
+        }
+        if((this.positionX > (this.game.lPlayer.positionX - 25) && (this.positionY < 0 ) &&  
+        (this.positionY + this.radius) > this.game.lPlayer.positionY - globalVar.PuddleHeight / 2)){
+            this.positionY -= this.radius;
+            this.velocityY *= -1;
+        }
     }
 
     updatePosition(io: Server) {
         this.positionX += this.velocityX;
         this.positionY -= this.velocityY;
-        this.checkCollision();
+        this.checkCollision(io);
         this.leftPlayer();
         this.rightPlayer();
 }

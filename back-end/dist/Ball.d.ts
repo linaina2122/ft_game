@@ -10,7 +10,7 @@ export declare class Ball {
     velocityY: number;
     speed: number;
     constructor(game: Game);
-    checkCollision(): void;
+    checkCollision(io: Server): void;
     resetBall(): void;
     leftPlayer(): void;
     rightPlayer(): void;

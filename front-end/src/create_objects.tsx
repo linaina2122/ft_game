@@ -16,7 +16,6 @@ export function puddles() {
     const material = new THREE.MeshBasicMaterial({ color: 0x0000FF, side: THREE.DoubleSide });
     const puddle = new THREE.Mesh(rectangle, material);
     puddle.position.set(left_player.positionX, left_player.positionY, 0);
-    console.log("left player: ", left_player);
     setup.scene.add(puddle);
     return (puddle)
 };
