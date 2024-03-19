@@ -29,8 +29,8 @@ export let Ball = {
 };
 
 export let right_player = {
-    height: 50,
-    width: 200,
+    height: 200,
+    width: 50,
     positionX: ((globalVar.Width / - 2) + 25),
     positionY: 0,
     velocity: 14, 

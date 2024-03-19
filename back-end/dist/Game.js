@@ -38,7 +38,7 @@ class left_player {
     constructor(server, myId, otherId) {
         this.height = 200;
         this.width = 50;
-        this.positionX = ((object_1.globalVar.Width / 2) - 25);
+        this.positionX = ((object_1.globalVar.Width / +2) - 25);
         this.positionY = 0;
         this.velocity = 25;
         this.score = 0;

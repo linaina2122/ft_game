@@ -12,8 +12,8 @@ export declare class Ball {
     constructor(game: Game);
     checkCollision(io: Server): void;
     resetBall(): void;
-    leftPlayer(): void;
     rightPlayer(): void;
+    leftPlayer(): void;
     updatePosition(io: Server): void;
     start(io: Server): void;
 }

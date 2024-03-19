@@ -50,7 +50,7 @@ class left_player {
 
     height = 200;
     width = 50;
-    positionX = ((globalVar.Width / 2) - 25);
+    positionX = ((globalVar.Width / + 2) - 25);
     positionY = 0;
     velocity = 25;
     score = 0;

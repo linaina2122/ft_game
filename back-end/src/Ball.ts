@@ -10,8 +10,8 @@ export class Ball {
     positionY = 0;
     radius = 25;
     segment = 100;
-    velocityX = 5;
-    velocityY = 5;
+    velocityX = 10;
+    velocityY = 10;
     speed = 0.5;
 
     constructor(game: Game) {
@@ -20,72 +20,90 @@ export class Ball {
     checkCollision(io : Server){
         if ((this.positionY - this.radius) * -1 > (globalVar.Height / 2) - 5)
             this.velocityY *= -1;
-        if ((this.positionY + this.radius)  > (globalVar.Height / 2) - 5)
+        else if ((this.positionY + this.radius)  > (globalVar.Height / 2) - 5)
             this.velocityY *= -1;
-        if (this.positionX < this.game.rPlayer.positionX - 25){
+        else if (this.positionX < this.game.rPlayer.positionX - 25){
             console.log("score is :", this.game.lPlayer.score);
             this.game.lPlayer.score += 1;
             io.to(this.game.roomName).emit("Lplayer_score", true);
             this.resetBall();
         }
-        if (this.positionX > this.game.lPlayer.positionX  + 25){
+        else if (this.positionX > this.game.lPlayer.positionX  + globalVar.PuddleWight / 2){
             this.game.rPlayer.score += 1;
             io.to(this.game.roomName).emit("Rplayer_score",true);
             console.log("score is :", this.game.rPlayer.score);
             this.resetBall();
         }
     }
+
     resetBall(){
         this.game.Ball.positionX = 0;
         this.game.Ball.positionY = 0;
-        this.velocityX = 5;
-        this.velocityY = 5;
+        this.velocityX = 10;
+        this.velocityY = 10;
     }
 
-    leftPlayer(){
-        if(this.positionX > 0){
-        if ((this.positionX + (this.radius * 2))  >= (this.game.lPlayer.positionX) &&
-             ((this.positionY <= (this.game.lPlayer.positionY + globalVar.PuddleHeight / 2))
-              && (this.positionY >= this.game.lPlayer.positionY - (globalVar.PuddleHeight / 2)))){
-            this.velocityX *= -1 ;
-            this.velocityX += this.speed;
-            this.velocityY += this.speed;
-        }
-        if((this.positionX > (this.game.lPlayer.positionX + 25) && this.positionY > 0 ) &&  
-        (this.positionY - this.radius) < this.game.lPlayer.positionY + globalVar.PuddleHeight / 2){
-            this.positionY += this.radius;
-            this.velocityY *= -1;
-        }
-        if(((this.positionX > (this.game.lPlayer.positionX + 25) && (this.positionY < 0 ) &&  
-        (this.positionY + this.radius) > this.game.lPlayer.positionY - globalVar.PuddleHeight / 2))){
-            this.positionY -= this.radius;
-            this.velocityY *= -1;
-        }
-    }
-    }
     rightPlayer(){
-        if (((this.positionX - (this.radius * 2))  <= (this.game.rPlayer.positionX) &&
-         (this.positionY <= (this.game.rPlayer.positionY + globalVar.PuddleHeight / 2))) &&
-          (this.positionY >= this.game.rPlayer.positionY - (globalVar.PuddleHeight / 2))){
-            this.velocityX *= -1 ;
-            this.velocityX += this.speed;
-            this.velocityY += this.speed; 
+        if(this.positionX > 0) {
+            if ((this.positionX + (this.radius))  >= (this.game.lPlayer.positionX - globalVar.PuddleWight / 2) &&
+                ((this.positionY <= (this.game.lPlayer.positionY + globalVar.PuddleHeight / 2))
+                && (this.positionY >= this.game.lPlayer.positionY - (globalVar.PuddleHeight / 2)))){
+                    this.velocityX += this.speed;
+                    this.velocityY += this.speed;
+                    if (this.velocityX > 0)
+                        this.velocityX *= -1 ;
+            }
+            else if ((this.positionX + this.radius > (this.game.lPlayer.positionX - globalVar.PuddleWight / 2)  &&  
+            (this.positionY - this.radius) <= this.game.lPlayer.positionY + globalVar.PuddleHeight / 2) &&
+            (this.positionY >= this.game.lPlayer.positionY)){
+                if (this.velocityY < 0) 
+                    this.velocityY *= -1;
+                if (this.velocityX > 0)
+                    this.velocityX *= -1;
+            }
+            else if (((this.positionX + this.radius > (this.game.lPlayer.positionX - globalVar.PuddleWight / 2) &&  
+            (this.positionY + this.radius) >= this.game.lPlayer.positionY - globalVar.PuddleHeight / 2)) &&
+            (this.positionY <= this.game.lPlayer.positionY)){
+                if (this.velocityY > 0)
+                    this.velocityY *= -1;
+                if (this.velocityX > 0)
+                    this.velocityX *= -1;
+            }
         }
-        if((this.positionX > (this.game.lPlayer.positionX - 25) && this.positionY > 0 ) &&  
-        (this.positionY - this.radius) < this.game.lPlayer.positionY + globalVar.PuddleHeight / 2){
-            this.positionY += this.radius;
-            this.velocityY *= -1;
-        }
-        if((this.positionX > (this.game.lPlayer.positionX - 25) && (this.positionY < 0 ) &&  
-        (this.positionY + this.radius) > this.game.lPlayer.positionY - globalVar.PuddleHeight / 2)){
-            this.positionY -= this.radius;
-            this.velocityY *= -1;
+    }
+    
+    leftPlayer(){
+        if(this.positionX < 0) {
+            if (((this.positionX - (this.radius))  <= (this.game.rPlayer.positionX + globalVar.PuddleWight / 2) &&
+            (this.positionY <= (this.game.rPlayer.positionY + globalVar.PuddleHeight / 2))) &&
+            (this.positionY >= this.game.rPlayer.positionY - (globalVar.PuddleHeight / 2))){
+                this.velocityX += this.speed;
+                this.velocityY += this.speed; 
+                if (this.velocityX < 0)
+                    this.velocityX *= -1 ;
+            }
+            else if ((this.positionX - this.radius < (this.game.rPlayer.positionX + globalVar.PuddleWight / 2)) &&  
+            (this.positionY - this.radius) <= this.game.rPlayer.positionY + globalVar.PuddleHeight / 2 &&
+            (this.positionY >= this.game.rPlayer.positionY)){
+                if (this.velocityY < 0)
+                    this.velocityY *= -1;
+                if (this.velocityX < 0)
+                    this.velocityX *= -1;
+            }
+            else if ((this.positionX - this.radius < (this.game.rPlayer.positionX + globalVar.PuddleWight / 2) &&  
+            (this.positionY + this.radius) >= this.game.rPlayer.positionY - globalVar.PuddleHeight / 2) &&
+            (this.positionY <= this.game.rPlayer.positionY)){
+                if (this.velocityY > 0)
+                    this.velocityY *= -1;
+                if (this.velocityX < 0)
+                    this.velocityX *= -1;
+            }
         }
     }
 
     updatePosition(io: Server) {
         this.positionX += this.velocityX;
-        this.positionY -= this.velocityY;
+        this.positionY += this.velocityY;
         this.checkCollision(io);
         this.leftPlayer();
         this.rightPlayer();
