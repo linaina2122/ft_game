@@ -25,12 +25,12 @@ export class Ball {
         else if (this.positionX < this.game.rPlayer.positionX - 25){
             console.log("score is :", this.game.lPlayer.score);
             this.game.lPlayer.score += 1;
-            io.to(this.game.roomName).emit("Lplayer_score", true);
+            io.to(this.game.roomName).emit("Lplayer_score");
             this.resetBall();
         }
         else if (this.positionX > this.game.lPlayer.positionX  + globalVar.PuddleWight / 2){
             this.game.rPlayer.score += 1;
-            io.to(this.game.roomName).emit("Rplayer_score",true);
+            io.to(this.game.roomName).emit("Rplayer_score");
             console.log("score is :", this.game.rPlayer.score);
             this.resetBall();
         }

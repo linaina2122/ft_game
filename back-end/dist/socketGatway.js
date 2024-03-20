@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.socketGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
@@ -31,6 +34,12 @@ let socketGateway = class socketGateway {
     onJoinGame(client) {
         joinRoom(this.server, client);
     }
+    OneVSone(client) {
+        OneGame(this.server, client);
+    }
+    onLeaveGame(client) {
+        checkDectonnectin(this.server, client);
+    }
 };
 exports.socketGateway = socketGateway;
 __decorate([
@@ -49,6 +58,19 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket]),
     __metadata("design:returntype", void 0)
 ], socketGateway.prototype, "onJoinGame", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('OneVSone'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:returntype", void 0)
+], socketGateway.prototype, "OneVSone", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('leaveGame'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:returntype", void 0)
+], socketGateway.prototype, "onLeaveGame", null);
 exports.socketGateway = socketGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ cors: true }),
     __metadata("design:paramtypes", [])
@@ -126,5 +148,26 @@ function checkSocket(socket) {
 }
 function leaveQueue(io, socket) {
     object_1.roomSetting.queue.filter(value => value !== socket.id);
+}
+function OneGame(io, socket) {
+    const RoomName = "duel" + object_1.roomSetting.duel;
+    const roomInfo = io.sockets.adapter.rooms;
+    if (Array.from(object_1.roomSetting.room.values()).includes(socket.id))
+        console.log("you are already existing in one room");
+    else {
+        object_1.roomSetting.room.set(RoomName, socket.id);
+        const tmp = new Set(socket.id);
+        roomInfo.set(RoomName, tmp);
+        if (io.sockets.adapter.rooms.get(RoomName)?.has(socket.id)) {
+            console.log(`Socket ${socket.id} is in room ${RoomName}`);
+        }
+        else {
+            console.log(`Socket ${socket.id} is NOT in room ${RoomName}`);
+        }
+        console.log(socket.id);
+        console.log("room :", RoomName, " is created");
+        io.emit("vsOne", true);
+        object_1.roomSetting.duel += 1;
+    }
 }
 //# sourceMappingURL=socketGatway.js.map

@@ -21,12 +21,12 @@ class Ball {
         else if (this.positionX < this.game.rPlayer.positionX - 25) {
             console.log("score is :", this.game.lPlayer.score);
             this.game.lPlayer.score += 1;
-            io.to(this.game.roomName).emit("Lplayer_score", true);
+            io.to(this.game.roomName).emit("Lplayer_score");
             this.resetBall();
         }
         else if (this.positionX > this.game.lPlayer.positionX + object_1.globalVar.PuddleWight / 2) {
             this.game.rPlayer.score += 1;
-            io.to(this.game.roomName).emit("Rplayer_score", true);
+            io.to(this.game.roomName).emit("Rplayer_score");
             console.log("score is :", this.game.rPlayer.score);
             this.resetBall();
         }
@@ -54,12 +54,10 @@ class Ball {
                     this.velocityY *= -1;
                 if (this.velocityX > 0)
                     this.velocityX *= -1;
-                console.log("right_player: we are in the second if");
             }
             else if (((this.positionX + this.radius > (this.game.lPlayer.positionX - object_1.globalVar.PuddleWight / 2) &&
                 (this.positionY + this.radius) >= this.game.lPlayer.positionY - object_1.globalVar.PuddleHeight / 2)) &&
                 (this.positionY <= this.game.lPlayer.positionY)) {
-                console.log("right_player: here");
                 if (this.velocityY > 0)
                     this.velocityY *= -1;
                 if (this.velocityX > 0)
@@ -76,7 +74,6 @@ class Ball {
                 this.velocityY += this.speed;
                 if (this.velocityX < 0)
                     this.velocityX *= -1;
-                console.log('left_player: we are in the first if');
             }
             else if ((this.positionX - this.radius < (this.game.rPlayer.positionX + object_1.globalVar.PuddleWight / 2)) &&
                 (this.positionY - this.radius) <= this.game.rPlayer.positionY + object_1.globalVar.PuddleHeight / 2 &&
@@ -85,7 +82,6 @@ class Ball {
                     this.velocityY *= -1;
                 if (this.velocityX < 0)
                     this.velocityX *= -1;
-                console.log("left_player: we are in the second if");
             }
             else if ((this.positionX - this.radius < (this.game.rPlayer.positionX + object_1.globalVar.PuddleWight / 2) &&
                 (this.positionY + this.radius) >= this.game.rPlayer.positionY - object_1.globalVar.PuddleHeight / 2) &&
@@ -94,7 +90,6 @@ class Ball {
                     this.velocityY *= -1;
                 if (this.velocityX < 0)
                     this.velocityX *= -1;
-                console.log("left_player: here");
             }
         }
     }

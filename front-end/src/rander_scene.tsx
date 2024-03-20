@@ -52,18 +52,16 @@ export function InitSetup() {
                 right_player.positionY = data;
             })
         })
-        window.addEventListener('keydown',(event)=>{
-            if(isRight){
-                if (event.keyCode == 38) {
-                    
+        const handleKeyDown = (event : any) => {
+            if (isRight) {
+                if (event.keyCode === 38) {
                     if (right_player.positionY > setup.Height - ((setup.Height / 2) + 103))
                         right_player.positionY += 0;
-                else
-                    right_player.positionY += (right_player.velocity + right_player.speed);
-            }
-                else if (event.keyCode === 40) {
+                    else
+                        right_player.positionY += (right_player.velocity + right_player.speed);
+                } else if (event.keyCode === 40) {
                     if (right_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 103)))
-                        right_player.positionY += 0 ;
+                        right_player.positionY += 0;
                     else
                         right_player.positionY -= (right_player.velocity + right_player.speed);
                 }
@@ -71,31 +69,35 @@ export function InitSetup() {
                     y: right_player.positionY
                 });
             }
-
-            if(isLeft){
+        
+            if (isLeft) {
                 if (event.keyCode === 38) {
                     if (left_player.positionY > setup.Height - ((setup.Height / 2) + 103))
-                        left_player.positionY += 0 ;
+                        left_player.positionY += 0;
                     else
                         left_player.positionY += (left_player.velocity + right_player.speed);
-                }
-                else if (event.keyCode === 40) {
+                } else if (event.keyCode === 40) {
                     if (left_player.positionY < -1 * (setup.Height - ((setup.Height / 2) + 103)))
-                        left_player.positionY += 0 ;
+                        left_player.positionY += 0;
                     else
                         left_player.positionY -= (left_player.velocity + right_player.speed);
                 }
-            Player.emit("lPlayer", {
-                y: left_player.positionY
-            });
-
+                Player.emit("lPlayer", {
+                    y: left_player.positionY
+                });
             }
-        })
+        };
+        window.addEventListener('keydown', handleKeyDown);
         setup.renderer.setAnimationLoop(() => {
             rander(ball, L_puddle, R_puddle);
         });
-        return () => {
-
+            return () => {
+                Player.off("Puddle2");
+                Player.off("Puddle1");
+                setup.renderer.setAnimationLoop(null); 
+                window.removeEventListener('keydown', handleKeyDown);
+                document.body.removeChild(setup.renderer.domElement);
+                setup.scene.remove(cub);
         };
     }, [/*  */])
     return (

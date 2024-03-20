@@ -1,15 +1,10 @@
-import { Injectable, Logger, Post } from "@nestjs/common";
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Console, error } from "console";
-import { Http2ServerRequest } from "http2";
-import { map } from "rxjs";
-import { Socket, Server } from "socket.io";
-import { roomSetting, globalVar} from "./object";
-import { exit } from "process";
-import { Game } from "./Game";
-import { subscribe } from "diagnostics_channel";
 
-@WebSocketGateway({ cors: true }) // decorator telling that this class is hundelling websocket
+import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { Socket, Server } from "socket.io";
+import { roomSetting} from "./object";
+import { Game } from "./Game";
+
+@WebSocketGateway({ cors: true })
 export class socketGateway {
     @WebSocketServer()
     server: Server;
@@ -34,17 +29,15 @@ export class socketGateway {
     onJoinGame(client: Socket) {
         joinRoom(this.server, client)
     }
-    // @SubscribeMessage('OneVSone')
-    // OneVSone(client: Socket){
-    //     OneGame(this.server, client);
-    // }
+    @SubscribeMessage('OneVSone')
+    OneVSone(client: Socket){
+        OneGame(this.server, client);
+    }
 
-
-    //     //     @SubscribeMessage('leaveGame')
-    //     //     onLeaveGame(@MessageBody() data: any) {
-    //     //          checkDectonnectin(this.server, client)
-    //     //         
-    //     //     }
+    @SubscribeMessage('leaveGame')
+    onLeaveGame(@MessageBody() client : Socket) {
+         checkDectonnectin(this.server, client) ;
+    }
 }
 
 function QueueWaiting(io: Server, socket: Socket) {
@@ -114,7 +107,6 @@ function leaveGame(roomName){
     }
 }
 
-
 function startGame(io: Server, game: Game) {
     game.Ball.start(io)
     
@@ -129,83 +121,27 @@ return (false)
 }
 
 function leaveQueue(io: Server, socket: Socket) {
-    roomSetting.queue.filter(value => value !== socket.id)
-    
+    roomSetting.queue.filter(value => value !== socket.id) 
 }
 
+function OneGame(io : Server, socket:Socket){
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function OneGame(io : Server, socket:Socket){
-
-//     const RoomName = "duel" + roomSetting.duel;
-//     const roomInfo = io.sockets.adapter.rooms;
-//     if( Array.from(roomSetting.room.values()).includes(socket.id))
-//         console.log("you are already existing in one room")
-//     else{
-//     roomSetting.room.set(RoomName, socket.id);
-//     const tmp: Set<string> =new  Set(socket.id)
-//     roomInfo.set(RoomName, tmp);
-//     if (io.sockets.adapter.rooms.get(RoomName)?.has(socket.id)) {
-//         console.log(`Socket ${socket.id} is in room ${RoomName}`);
-//     } else {
-//         console.log(`Socket ${socket.id} is NOT in room ${RoomName}`);
-//     }
-//     console.log(socket.id);
-//     console.log("room :", RoomName , " is created")
-//     io.emit("vsOne", true);
-//     roomSetting.duel += 1;
-// }
-// }
+    const RoomName = "duel" + roomSetting.duel;
+    const roomInfo = io.sockets.adapter.rooms;
+    if( Array.from(roomSetting.room.values()).includes(socket.id))
+        console.log("you are already existing in one room")
+    else{
+    roomSetting.room.set(RoomName, socket.id);
+    const tmp: Set<string> =new  Set(socket.id)
+    roomInfo.set(RoomName, tmp);
+    if (io.sockets.adapter.rooms.get(RoomName)?.has(socket.id)) {
+        console.log(`Socket ${socket.id} is in room ${RoomName}`);
+    } else {
+        console.log(`Socket ${socket.id} is NOT in room ${RoomName}`);
+    }
+    console.log(socket.id);
+    console.log("room :", RoomName , " is created")
+    io.emit("vsOne", true);
+    roomSetting.duel += 1;
+}
+}
